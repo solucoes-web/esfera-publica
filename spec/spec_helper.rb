@@ -16,11 +16,22 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-RSpec.configure do |config|
-config.before(:suite) do
-  DatabaseCleaner.strategy = :transaction
+
+VCR.configure do |config|
+  config.cassette_library_dir = "spec/vcr_cassettes"
+  config.hook_into :faraday
+end
+
+
+def clean_db
   DatabaseCleaner.clean_with(:truncation)
 end
+
+RSpec.configure do |config|
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    clean_db
+  end
 
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest

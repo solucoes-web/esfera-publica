@@ -1,0 +1,30 @@
+<div class="page-header">
+  <%= link_to new_feed_path, class: 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-plus"></span>
+    New Feed
+  <% end %>
+  <h1>Listing feeds</h1>
+</div>
+
+<%= content_tag_for(:tr, @feeds) do |feed| %>
+  <div class="panel panel-default">
+    <div class="panel-body row">
+      <div class="col-md-1">
+        <% if feed.favicon %>
+          <%= image_tag feed.favicon, height: '24pt', class: 'media-object' %>
+        <% end %>
+      </div>
+      <div class="col-md-4">
+        <%= link_to feed.name, feed %>
+      </div>
+      <div class="col-md-2 pull-right">
+        <button type="button" class="btn btn-default edit">
+          <%= link_to content_tag(:span, '', class: "glyphicon glyphicon-cog"), edit_feed_path(feed) %>
+        </button>
+        <button type="button" class="btn btn-default destroy">
+          <%= link_to content_tag(:span, '', class: "glyphicon glyphicon-trash"), feed, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </button>
+      </div>
+    </div>
+  </div>
+<% end %>

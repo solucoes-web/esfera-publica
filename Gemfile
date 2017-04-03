@@ -62,7 +62,9 @@ group :test do
   gem 'guard-rspec'
   gem 'poltergeist'
   gem 'database_cleaner'
+  gem 'vcr'
 end
 
 gem 'bootstrap-generators', '~> 3.3.4'
+gem 'feedjira'
 gem 'record_tag_helper'
