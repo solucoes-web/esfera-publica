@@ -9,7 +9,7 @@ RSpec.feature "FeedWorkflows", type: :feature do
     VCR.use_cassette "bbc" do
       visit new_feed_path
       fill_in "Name", with: "BBC"
-      fill_in "Url", with: "http://feeds.bbci.co.uk/news/rss.xml"
+      fill_in "Url", with: "http://bbc.com"
       expect do
         click_button "Register"
       end.to change{ Feed.count }.by 1
