@@ -60,7 +60,7 @@ group :test do
   gem 'factory_girl_rails'
   gem 'capybara'
   gem 'guard-rspec'
-  gem 'poltergeist'
+#  gem 'poltergeist'
   gem 'database_cleaner'
   gem 'vcr'
 end
