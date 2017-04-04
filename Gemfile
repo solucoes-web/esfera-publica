@@ -68,3 +68,4 @@ end
 gem 'bootstrap-generators', '~> 3.3.4'
 gem 'feedjira'
 gem 'record_tag_helper'
+gem 'pismo'
