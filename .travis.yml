@@ -1,6 +1,5 @@
 language: ruby
 rvm:
 - 2.4.0
-script: phantomjs testrunner.js
 before_install:
 - openssl aes-256-cbc -K $encrypted_4e98505f9d9f_key -iv $encrypted_4e98505f9d9f_iv -in config/secrets.yml.enc -out config/secrets.yml -d
