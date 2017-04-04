@@ -6,10 +6,10 @@ RSpec.feature "FeedWorkflows", type: :feature do
   end
 
   scenario "Register new feed" do
-    VCR.use_cassette "elpais" do
+    VCR.use_cassette "folha" do
       visit new_feed_path
-      fill_in "Name", with: "El Pais"
-      fill_in "Url", with: "http://brasil.elpais.com"
+      fill_in "Name", with: "Folha de São Paulo"
+      fill_in "Url", with: "http://feeds.folha.uol.com.br/folha/emcimadahora/rss091.xml"
       expect do
         click_button "Register"
       end.to change{ Feed.count }.by 1
@@ -33,9 +33,9 @@ RSpec.feature "FeedWorkflows", type: :feature do
   end
 
   scenario "Get basic info from host" do
-    VCR.use_cassette "elpais" do
+    VCR.use_cassette "propublica" do
       visit new_feed_path
-      fill_in "Url", with: "http://brasil.elpais.com"
+      fill_in "Url", with: "https://www.propublica.org/"
       click_button "Register"
       feed = Feed.first
       expect(feed.name).not_to be_blank
@@ -43,7 +43,7 @@ RSpec.feature "FeedWorkflows", type: :feature do
     end
   end
 
-  scenario "Get basic info from host" do
+  scenario "Get basic info from rss" do
     VCR.use_cassette "folha" do
       visit new_feed_path
       fill_in "Url", with: "http://feeds.folha.uol.com.br/folha/emcimadahora/rss091.xml"
