@@ -6,7 +6,7 @@ RSpec.feature "FeedWorkflows", type: :feature do
   end
 
   scenario "Register new feed" do
-    VCR.use_cassette "elpais" do
+  #  VCR.use_cassette "elpais" do
       visit new_feed_path
       fill_in "Name", with: "El Pais"
       fill_in "Url", with: "http://brasil.elpais.com"
@@ -14,7 +14,7 @@ RSpec.feature "FeedWorkflows", type: :feature do
         click_button "Register"
       end.to change{ Feed.count }.by 1
       expect(page).to have_current_path(feeds_path)
-    end
+  #  end
   end
 
   scenario "Destroy feed" do
@@ -33,14 +33,14 @@ RSpec.feature "FeedWorkflows", type: :feature do
   end
 
   scenario "Get basic info from host" do
-    VCR.use_cassette "elpais" do
+  #  VCR.use_cassette "elpais" do
       visit new_feed_path
       fill_in "Url", with: "http://brasil.elpais.com"
       click_button "Register"
       feed = Feed.first
       expect(feed.name).not_to be_blank
       expect(feed.favicon).not_to be_blank
-    end
+  #  end
   end
 
   scenario "Get basic info from host" do
