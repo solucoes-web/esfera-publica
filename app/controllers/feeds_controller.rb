@@ -25,13 +25,20 @@ class FeedsController < ApplicationController
   # POST /feeds.json
   def create
     @feed = Feed.new(feed_params)
+    begin
+      @feed.get_basic_info
+    rescue ArgumentError => e
+      flash[:error] = e.message
+      render :new
+      return
+    end
 
     respond_to do |format|
       if @feed.save
         format.html { redirect_to feeds_path, notice: 'Feed was successfully created.' }
         format.json { render :show, status: :created, location: @feed }
       else
-        format.html { render :new }
+        format.html { render :new, error: @feed.errors.messages }
         format.json { render json: @feed.errors, status: :unprocessable_entity }
       end
     end
