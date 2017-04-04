@@ -8,13 +8,8 @@ RSpec.feature "FeedWorkflows", type: :feature do
   scenario "Register new feed" do
     VCR.use_cassette "elpais" do
       visit new_feed_path
-<<<<<<< HEAD
-      fill_in "Name", with: "BBC"
-      fill_in "Url", with: "http://bbc.com"
-=======
       fill_in "Name", with: "El Pais"
       fill_in "Url", with: "http://brasil.elpais.com"
->>>>>>> bedc28a65cc36318a9a5ad03dc9b25444db2193a
       expect do
         click_button "Register"
       end.to change{ Feed.count }.by 1
