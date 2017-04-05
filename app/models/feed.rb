@@ -13,8 +13,30 @@ class Feed < ApplicationRecord
     end
   end
 
+  def add_itens
+    f = Feedjira::Feed.fetch_and_parse url
+    add_entries(f.entries)
+    f
+  end
+
+  def update_itens(f)
+    f = Feedjira::Feed.update f
+    add_entries(f.new_entries) if f.updated?
+  end
 
   private
+
+  def add_entries(entries)
+    entries.each do |entry|
+      unless exists? guid: entry.id
+        create!(name: entry.title,
+                summary: entry.summary,
+                url: entry.url,
+                published_at: entry.published,
+                guid: entry.id)
+      end
+    end
+  end
 
   def get_host_info
     pismo = Pismo[url]
