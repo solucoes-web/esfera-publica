@@ -11,6 +11,7 @@ RSpec.describe Feed, type: :model do
       @rss = double(:rss, url: @url, title: nil) # mocking an object
       # stubing a method
       allow(Feedjira::Feed).to receive(:fetch_and_parse).with("#{@url}/rss").and_return(@rss)
+      allow(Feedjira::Feed).to receive(:fetch_and_parse).with(@url).and_throw(Exception)
     end
     after(:all) do
       WebMock.allow_net_connect!
@@ -50,7 +51,6 @@ RSpec.describe Feed, type: :model do
     end
 
     it "follows links to RSS from URL" do
-      allow(Feedjira::Feed).to receive(:fetch_and_parse).with(@url).and_throw(Exception)
       allow(Feedjira::Feed).to receive(:fetch_and_parse).with("#{@url}/rss").and_return(@rss)
       allow(Pismo[@url]).to receive(:feed).and_return("#{@url}/rss")
       feed = create(:feed, url: @url)
@@ -59,15 +59,27 @@ RSpec.describe Feed, type: :model do
       expect(feed.instance_variable_get(:@rss)).to eq @rss
     end
 
-    it "gets basic info" do
+    it "gets rss info" do
+      @rss = double(:rss, url: @url, title: "name") # mocking an object
       feed = build(:feed, url: @url, name: nil)
-      rss = double(title: 'name', url: @url)
-      feed.instance_variable_set(:@rss, rss)
+      feed.instance_variable_set(:@rss, @rss)
       allow(Pismo[@url]).to receive(:favicon).and_return("#{@url}/favicon.png")
 
-      feed.instance_eval{ get_basic_info }
+      feed.instance_eval{ get_rss_info }
 
       expect(feed.name).to eq "name"
+      expect(feed.favicon).to eq "#{@url}/favicon.png"
+    end
+
+    it "gets host info" do
+      feed = build(:feed, url: @url, name: nil)
+      feed.instance_variable_set(:@rss, @rss)
+      allow(Pismo[@url]).to receive(:favicon).and_return("#{@url}/favicon.png")
+      allow(Pismo[@url]).to receive(:feed).and_return("#{@url}/rss")
+
+      feed.instance_eval{ get_host_info }
+
+      expect(feed.url).to eq "#{@url}/rss"
       expect(feed.favicon).to eq "#{@url}/favicon.png"
     end
   end
