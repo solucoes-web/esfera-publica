@@ -15,7 +15,10 @@ Consulte o [plano de trabalho](https://docs.google.com/presentation/d/1jxLIZcn9u
 
 ## Instalação
 
-* clone o repositorio: `git clone https://github.com/solucoes-web/esfera-publica.git`
+* clone o repositorio:
+  * `git clone https://github.com/solucoes-web/esfera-publica.git`
 * gere uma chave usando `rake secret` para cada `secret_key_base` em `config/secrets.sample.yml`
-* renomeie o arquivo `config/secrets.sample.yml` para `config/secrets.yml`: `mv config/secrets.sample.yml config/secrets.yml`
-* rode as migrações: `rake db:migrate`
+* renomeie o arquivo `config/secrets.sample.yml` para `config/secrets.yml`:
+  * `mv config/secrets.sample.yml config/secrets.yml`
+* rode as migrações:
+  * `rake db:migrate`
