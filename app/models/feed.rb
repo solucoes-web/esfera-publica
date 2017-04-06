@@ -1,31 +1,40 @@
 class Feed < ApplicationRecord
   validates :url, :name, presence: true
   validate :persistency_of_url
+  validate :well_formed_rss
 
-  def get_basic_info
+  before_validation do
     begin
-      f = Feedjira::Feed.fetch_and_parse url # try to fetch RSS
-      self.name = f.title if name.blank? # get title
-      self.favicon ||= Pismo[f.url].favicon
+      @rss = Feedjira::Feed.fetch_and_parse url # tenta fazer o parse do RSS
     rescue
-      # neste caso vou assumir que o que me passaram aponta para o RSS
-      get_host_info
+      if url
+        pismo = Pismo[url]
+        if pismo
+          self.url = pismo.feed # pega o endereço do RSS
+          self.favicon = pismo.favicon
+          self.validate
+        end
+      end
+    ensure
+      get_basic_info if @rss
     end
   end
 
-
-  private
-
-  def get_host_info
-    pismo = Pismo[url]
-    self.favicon = pismo.favicon # get favicon
-    self.url = pismo.feed || raise(ArgumentError.new('RSS inválido'))
-    get_basic_info
+  def well_formed_rss
+    unless @rss
+      errors.add(:url, "RSS inválido")
+    end
   end
 
   def persistency_of_url
     if url_changed? && self.persisted?
-      errors.add(:url, "Change URL is not allowed")
+      errors.add(:url, "Mudar o URL não é permitido")
     end
+  end
+
+  private
+  def get_basic_info
+    self.name = @rss.title if name.blank? # pega o titulo caso ainda não tenha sido feito
+    self.favicon ||= Pismo[@rss.url].favicon # pega um favicon caso ainda não tenha sido feito
   end
 end
