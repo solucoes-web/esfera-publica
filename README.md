@@ -12,3 +12,15 @@ Construir uma plataforma distribuída para leitura e compartilhamento de notíci
 * plataforma distribuída (i.e. usuários em outros sites usando o mesmo modelo RSS podem compartilhar materias uns com os outros)
 
 Consulte o [plano de trabalho](https://docs.google.com/presentation/d/1jxLIZcn9uPJnliXzE5CRlQD7mq5iaruq_4Jke4QBpdw/edit?usp=sharing) para mais detalhes.
+
+## Instalação
+
+* clone o repositorio
+   $ git clone https://github.com/solucoes-web/esfera-publica.git
+* gere uma chave para cada `secret_key_base` em `config/secrets.sample.yml` usando
+   $ rake secret
+* renomeie o arquivo `config/secrets.sample.yml` para `config/secrets.yml`
+   $ mv config/secrets.sample.yml config/secrets.yml
+* rode as migrações
+   $ rake db:migrate
+   
