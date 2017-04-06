@@ -1,0 +1,33 @@
+<div class="page-header">
+  <%= link_to new_feed_path, class: 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-plus"></span>
+    New Feed
+  <% end %>
+  <h1>Listing feeds</h1>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+            <th>Name</th>
+            <th>Url</th>
+            <th>Favicon</th>
+            <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= content_tag_for(:tr, @feeds) do |feed| %>
+            <td><%= feed.name %></td>
+            <td><%= feed.url %></td>
+            <td><%= feed.favicon %></td>
+            <td><%= link_to 'Show', feed %></td>
+        <td><%= link_to 'Edit', edit_feed_path(feed) %></td>
+        <td><%= link_to 'Destroy', feed, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <% end %>
+    </tbody>
+  </table>
+</div>
