@@ -1,5 +1,5 @@
 module ApplicationHelper
-  def date(date)
+  def default_date_format(date)
     date.strftime("%d/%m/%y %H:%M")
   end
 end
