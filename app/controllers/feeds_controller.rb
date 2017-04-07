@@ -17,10 +17,12 @@ class FeedsController < ApplicationController
   # GET /feeds/new
   def new
     @feed = Feed.new
+    render layout: "modal"
   end
 
   # GET /feeds/1/edit
   def edit
+    render layout: "modal"
   end
 
   # POST /feeds

@@ -1,5 +1,5 @@
 <div class="page-header">
-  <%= link_to new_feed_path, class: 'btn btn-primary' do %>
+  <%= link_to new_feed_path, class: 'btn btn-primary', data: {behavior: "modal"} do %>
     <span class="glyphicon glyphicon-plus"></span>
     New Feed
   <% end %>
@@ -19,10 +19,14 @@
         <%= link_to feed.name, feed %>
       </td>
       <td class='edit'>
-        <%= link_to content_tag(:span, '', class: "glyphicon glyphicon-cog"), edit_feed_path(feed) %>
+        <%= link_to edit_feed_path(feed), data: {behavior: "modal"} do %>
+          <span class="glyphicon glyphicon-cog"></span>
+        <% end %>
       </td>
       <td class="destroy">
-        <%= link_to content_tag(:span, '', class: "glyphicon glyphicon-trash"), feed, method: :delete, data: { confirm: 'Are you sure?' } %>
+        <%= link_to feed, method: :delete, data: {confirm: 'Are you sure?'} do %>
+          <span class="glyphicon glyphicon-trash"></span>
+        <% end %>
       </td>
       <% end %>
     </tr>

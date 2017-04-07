@@ -1,13 +1,9 @@
-<div class="page-header">
-  <%= link_to feeds_path, class: 'btn btn-default' do %>
-    <span class="glyphicon glyphicon-list-alt"></span>
-    Back
-  <% end %>
-  <%= link_to @feed, class: 'btn btn-primary' do %>
-    <span class="glyphicon glyphicon-info-sign"></span>
-    Show
-  <% end %>
-  <h1>Editing feed</h1>
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <h4 class="modal-title" id="myModalLabel">Editing Feed</h4>
 </div>
-
-<%= render 'form' %>
+<div class="modal-body">
+  <%= render 'form' %>
+</div>

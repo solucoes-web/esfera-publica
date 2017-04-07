@@ -11,7 +11,9 @@ RSpec.feature "FeedWorkflows", type: :feature do
 
   scenario "Register new feed" do
     VCR.use_cassette "folha" do
-      visit new_feed_path
+      visit feeds_path
+      click_link "New Feed"
+
       fill_in "Name", with: "Folha de São Paulo"
       fill_in "Url", with: "http://feeds.folha.uol.com.br/folha/emcimadahora/rss091.xml"
       expect do
@@ -35,7 +37,9 @@ RSpec.feature "FeedWorkflows", type: :feature do
   scenario "Edit feed" do
     feed = build(:feed, name: "Test")
     feed.save(validate: false)
-    visit edit_feed_path(feed)
+    visit feeds_path
+    first(':has(.glyphicon-cog)').click
+
     expect(find_field('Name').value).to eq 'Test'
     expect(page).to have_field('Url', disabled: true)
   end
