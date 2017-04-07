@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Items", type: :request do
+  pending "items request tests"
   describe "GET /items" do
     it "works! (now write some real specs)" do
       get items_path
