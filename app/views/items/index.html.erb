@@ -16,7 +16,7 @@
         <%= item.name %>
       </h4>
       <h6 class="media-heading item-date">
-        <%= date item.published_at %>
+        <%= default_date_format item.published_at %>
       </h6>
       <div class="item-summary">
         <%= sanitize item.summary %>
