@@ -86,11 +86,11 @@ RSpec.describe Feed, type: :model do
 
   context "new items" do
     before(:each) do
-      @entry = double(name: 'name',
-                     summary: 'summary',
-                     url: 'http://example.com',
-                     published_at: 3.day.ago,
-                     guid: 1)
+      @entry = double(title: 'name',
+                      summary: 'summary',
+                      url: 'http://example.com',
+                      published: 3.day.ago,
+                      id: 1)
     end
 
     it "adds items" do
@@ -100,20 +100,8 @@ RSpec.describe Feed, type: :model do
 
       feed.instance_variable_set(:@rss, @rss)
       expect do
-        feed.instance_eval{ add_items }
-      end.to change{feed.entries.count}.by 1
-    end
-
-    it "updates items" do
-      feed = build(:feed)
-      feed.save(validate: false)
-      @rss = double(:rss, new_entries: [@entry])
-      allow(@rss).to receive(:updated?).and_return(true)
-
-      feed.instance_variable_set(:@rss, @rss)
-      expect do
         feed.instance_eval{ update_items }
-      end.to change{feed.entries.count}.by 1
+      end.to change{feed.items.count}.by 1
     end
   end
 end

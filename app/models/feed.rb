@@ -1,4 +1,5 @@
 class Feed < ApplicationRecord
+  has_many :items
   validates :url, :name, presence: true
   validate :persistency_of_url
   validate :well_formed_rss
@@ -25,25 +26,20 @@ class Feed < ApplicationRecord
     end
   end
 
-  def add_items
-    @rss ||= Feedzirra::Feed.fetch_and_parse url
-    add_entries(@rss.entries)
-  end
-
   def update_items
-    @rss = Feedzirra::Feed.update(@rss)
-    add_entries(@rss.new_entries) if @rss.updated?
+    @rss ||= Feedjira::Feed.fetch_and_parse url
+    add_entries(@rss.entries)
   end
 
   private
   def add_entries(entries)
     entries.each do |entry|
-      unless exists? guid: entry.id
-        create!(name: entry.title,
-                summary: entry.summary,
-                url: entry.url,
-                published_at: entry.published,
-                guid: entry.id)
+      unless items.exists? guid: entry.id
+        items.create!(name: entry.title,
+                     summary: entry.summary,
+                     url: entry.url,
+                     published_at: entry.published,
+                     guid: entry.id)
       end
     end
   end
