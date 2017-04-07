@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.feature "FeedWorkflows", type: :feature do
+  before :all do
+    WebMock.allow_net_connect!
+  end
+
   before :each do
     clean_db
   end
@@ -18,7 +22,10 @@ RSpec.feature "FeedWorkflows", type: :feature do
   end
 
   scenario "Destroy feed" do
-    3.times{ create(:feed) }
+    3.times do
+      feed = build(:feed)
+      feed.save(validate: false)
+    end
     visit feeds_path
     expect do
       first(".destroy a").click
@@ -26,31 +33,32 @@ RSpec.feature "FeedWorkflows", type: :feature do
   end
 
   scenario "Edit feed" do
-    feed = create(:feed, name: "Test")
+    feed = build(:feed, name: "Test")
+    feed.save(validate: false)
     visit edit_feed_path(feed)
     expect(find_field('Name').value).to eq 'Test'
     expect(page).to have_field('Url', disabled: true)
   end
 
   scenario "Get basic info from host" do
-    VCR.use_cassette "propublica" do
-      visit new_feed_path
-      fill_in "Url", with: "https://www.propublica.org/"
-      click_button "Register"
-      feed = Feed.first
-      expect(feed.name).not_to be_blank
-      expect(feed.favicon).not_to be_blank
+     VCR.use_cassette "propublica" do
+       visit new_feed_path
+       fill_in "Url", with: "https://www.propublica.org/"
+       click_button "Register"
+       feed = Feed.first
+       expect(feed.name).not_to be_blank
+       expect(feed.favicon).not_to be_blank
     end
   end
 
   scenario "Get basic info from rss" do
-    VCR.use_cassette "folha" do
-      visit new_feed_path
-      fill_in "Url", with: "http://feeds.folha.uol.com.br/folha/emcimadahora/rss091.xml"
-      click_button "Register"
-      feed = Feed.first
-      expect(feed.name).not_to be_blank
-      expect(feed.favicon).not_to be_blank
-    end
-  end
+   VCR.use_cassette "folha" do
+     visit new_feed_path
+     fill_in "Url", with: "http://feeds.folha.uol.com.br/folha/emcimadahora/rss091.xml"
+     click_button "Register"
+     feed = Feed.first
+     expect(feed.name).not_to be_blank
+     expect(feed.favicon).not_to be_blank
+   end
+ end
 end

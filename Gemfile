@@ -63,6 +63,7 @@ group :test do
   gem 'poltergeist'
   gem 'database_cleaner'
   gem 'vcr'
+  gem 'webmock'
 end
 
 gem 'bootstrap-generators', '~> 3.3.4'

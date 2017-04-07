@@ -2,10 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "feeds/edit", type: :view do
   before(:each) do
-    @feed = assign(:feed, Feed.create!(
-      :name => "MyString",
-      :url => "http://example.org"
-    ))
+    @feed = assign(:feed, build_stubbed(:feed))
   end
 
   it "renders the edit feed form" do

@@ -2,10 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "feeds/new", type: :view do
   before(:each) do
-    assign(:feed, Feed.new(
-      :name => "MyString",
-      :url => "MyString",
-    ))
+    assign(:feed, build(:feed, name: "name", url: "http://example.org"))
   end
 
   it "renders new feed form" do
