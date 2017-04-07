@@ -11,6 +11,5 @@ RSpec.describe "items/show", type: :view do
     expect(rendered).to match(/#{@it.name}/)
     expect(rendered).to match(/#{@it.summary}/)
     expect(rendered).to match(/#{@it.url}/)
-    expect(rendered).to match(/#{@it.guid}/)
   end
 end

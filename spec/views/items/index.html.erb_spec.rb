@@ -9,10 +9,9 @@ RSpec.describe "items/index", type: :view do
   it "renders a list of items" do
     render
     @items.each do |item|
-      assert_select "tr>td", :text => item.name
-      assert_select "tr>td", :text => item.summary
-      assert_select "tr>td", :text => item.url
-      assert_select "tr>td", :text => item.guid
+      assert_select "li .item-title", text: item.name, href: item.url
+#      assert_select "li .item-date", text: item.published_at
+      assert_select "li .item-summary", text: item.summary
     end
   end
 end

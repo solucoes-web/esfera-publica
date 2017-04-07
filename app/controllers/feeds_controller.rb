@@ -9,8 +9,10 @@ class FeedsController < ApplicationController
 
   # GET /feeds/1
   # GET /feeds/1.json
-  # def show
-  # end
+  def show
+    @items = @feed.items
+    render template: "items/index"
+  end
 
   # GET /feeds/new
   def new

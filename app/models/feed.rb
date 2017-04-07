@@ -36,10 +36,10 @@ class Feed < ApplicationRecord
     entries.each do |entry|
       unless items.exists? guid: entry.id
         items.create!(name: entry.title,
-                     summary: entry.summary,
-                     url: entry.url,
-                     published_at: entry.published,
-                     guid: entry.id)
+                      summary: entry.summary,
+                      url: entry.url,
+                      published_at: entry.published,
+                      guid: entry.id)
       end
     end
   end
