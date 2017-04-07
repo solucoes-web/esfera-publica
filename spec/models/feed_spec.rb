@@ -28,7 +28,7 @@ RSpec.describe Feed, type: :model do
       expect(feed).to be_invalid
     end
 
-    it "does not allow to update url" do
+    it "does not allow to update URL" do
       allow(Feedjira::Feed).to receive(:fetch_and_parse).with("another_url").and_return(@rss)
       feed = create(:feed, url: "#{@url}/rss")
       feed.url = "another_url"
@@ -81,6 +81,27 @@ RSpec.describe Feed, type: :model do
 
       expect(feed.url).to eq "#{@url}/rss"
       expect(feed.favicon).to eq "#{@url}/favicon.png"
+    end
+  end
+
+  context "new items" do
+    before(:each) do
+      @entry = double(title: 'name',
+                      summary: 'summary',
+                      url: 'http://example.com',
+                      published: 3.day.ago,
+                      id: 1)
+    end
+
+    it "adds items" do
+      feed = build(:feed)
+      feed.save(validate: false)
+      @rss = double(:rss, entries: [@entry])
+
+      feed.instance_variable_set(:@rss, @rss)
+      expect do
+        feed.instance_eval{ update_items }
+      end.to change{feed.items.count}.by 1
     end
   end
 end

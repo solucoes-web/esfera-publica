@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170403194205) do
+ActiveRecord::Schema.define(version: 20170407014308) do
 
   create_table "feeds", force: :cascade do |t|
     t.string   "name"
@@ -18,6 +18,18 @@ ActiveRecord::Schema.define(version: 20170403194205) do
     t.string   "favicon"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "items", force: :cascade do |t|
+    t.string   "name"
+    t.text     "summary"
+    t.string   "url"
+    t.datetime "published_at"
+    t.string   "guid"
+    t.integer  "feed_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["feed_id"], name: "index_items_on_feed_id"
   end
 
 end
