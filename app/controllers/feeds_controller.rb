@@ -16,7 +16,7 @@ class FeedsController < ApplicationController
   # GET /feeds/1
   # GET /feeds/1.json
   def show
-    @items = @feed.items
+    @items = @feed.items.latest(20)
     render template: "items/index"
   end
 

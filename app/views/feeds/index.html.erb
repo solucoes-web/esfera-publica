@@ -13,7 +13,7 @@
             <% end %>
           </td>
           <td>
-            <%= link_to feed.name, feed %>
+            <%= link_to raw(feed.name), feed %>
           </td>
           <td class='edit'>
             <%= link_to edit_feed_path(feed), data: {behavior: "modal"} do %>

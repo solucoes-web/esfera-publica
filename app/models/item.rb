@@ -5,7 +5,7 @@ class Item < ApplicationRecord
               INNER JOIN tags ON tags.id = taggings.tag_id AND\
               taggings.taggable_type = 'Feed'").where("tags.name = ?", tag)
   } # será que existe uma forma mais elegante?
-  scope :most_recent, ->(number) {
+  scope :latest, ->(number) {
     order(published_at: :desc).limit(number)
   } # será que existe uma forma mais elegante?
 end
