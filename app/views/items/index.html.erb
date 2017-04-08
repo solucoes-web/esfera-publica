@@ -1,45 +1,38 @@
-<div class="row">
-  <div class="col-md-3">
-    <%= render "sidebar" %>
-  </div>
-  <div class="col-md-6">
-    <nav class="navbar navbar-default">
-      <%= render 'search' %>
-    </nav>
-    <%= content_tag_for(:ul, @items, class: 'media-list panel panel-default') do |item| %>
-      <li class="media panel-body">
-        <div class="media-left">
-          <% if item.feed && item.feed.favicon %>
-            <%= link_to item.feed do %>
-              <%= image_tag item.feed.favicon, class: 'media-object', height: '24pt', alt: 'favicon' %>
-            <% end %>
-          <% end %>
-        </div>
-        <div class="media-body">
-          <h4 class="media-heading item-title">
-            <%= raw(item.name) %>
-          </h4>
-          <h6 class="media-heading item-date">
-            <%= default_date_format item.published_at %>
-          </h6>
-          <div class="item-summary">
-            <%= sanitize item.summary %>
-          </div>
-          <br/>
-          <div class="btn-group pull-right" role="group">
-            <%= link_to item,  data: {behavior: "modal"} do %>
-              <button type='button', class='btn btn-primary'>
-                Ler aqui
-              </button>
-            <% end %>
-            <%= link_to item.url do %>
-              <button type='button', class='btn btn-default'>
-                Ler na página
-              </button>
-            <% end %>
-          </div>
-        </div>
-      </li>
+<nav class="navbar navbar-default">
+  <%= render 'search' %>
+</nav>
+<%= content_tag_for(:ul, @items, class: 'media-list panel panel-default') do |item| %>
+<li class="media panel-body">
+  <div class="media-left">
+    <% if item.feed && item.feed.favicon %>
+    <%= link_to item.feed do %>
+    <%= image_tag item.feed.favicon, class: 'media-object', height: '24pt', alt: 'favicon' %>
+    <% end %>
     <% end %>
   </div>
-</div>
+  <div class="media-body">
+    <h4 class="media-heading item-title">
+      <%= raw(item.name) %>
+    </h4>
+    <h6 class="media-heading item-date">
+      <%= default_date_format item.published_at %>
+    </h6>
+    <div class="item-summary">
+      <%= sanitize item.summary %>
+    </div>
+    <br/>
+    <div class="btn-group pull-right" role="group">
+      <%= link_to item,  data: {behavior: "modal"} do %>
+      <button type='button', class='btn btn-primary'>
+        Ler aqui
+      </button>
+      <% end %>
+      <%= link_to item.url do %>
+      <button type='button', class='btn btn-default'>
+        Ler na página
+      </button>
+      <% end %>
+    </div>
+  </div>
+</li>
+<% end %>

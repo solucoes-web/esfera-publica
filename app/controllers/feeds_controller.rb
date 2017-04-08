@@ -2,7 +2,6 @@ class FeedsController < ApplicationController
   before_action :set_feed, only: [:show, :edit, :update, :destroy]
 
   # GET /feeds
-  # GET /feeds.json
   def index
     @search = params[:search] ? Feed.search(params[:search]) : Feed
 
@@ -13,12 +12,14 @@ class FeedsController < ApplicationController
       @feeds = @search.all
       @filter = 'all'
     end
+    @type = "feed"
   end
 
   # GET /feeds/1
-  # GET /feeds/1.json
   def show
     @items = @feed.items.latest(20)
+    @search = Item
+    @type = "item"
     render template: "items/index"
   end
 
@@ -34,7 +35,6 @@ class FeedsController < ApplicationController
   end
 
   # POST /feeds
-  # POST /feeds.json
   def create
     @feed = Feed.new(feed_params)
     if @feed.save
@@ -45,27 +45,18 @@ class FeedsController < ApplicationController
   end
 
   # PATCH/PUT /feeds/1
-  # PATCH/PUT /feeds/1.json
   def update
-    respond_to do |format|
-      if @feed.update(feed_params)
-        format.html { redirect_to feeds_path, notice: 'Feed was successfully updated.' }
-        format.json { render :show, status: :ok, location: @feed }
-      else
-        format.html { render :edit }
-        format.json { render json: @feed.errors, status: :unprocessable_entity }
-      end
+    if @feed.update(feed_params)
+      redirect_to feeds_path, notice: 'Feed was successfully updated.'
+    else
+      render :edit
     end
   end
 
   # DELETE /feeds/1
-  # DELETE /feeds/1.json
   def destroy
     @feed.destroy
-    respond_to do |format|
-      format.html { redirect_to feeds_url, notice: 'Feed was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to feeds_url, notice: 'Feed was successfully destroyed.'
   end
 
   private

@@ -18,7 +18,7 @@ RSpec.feature "ItemWorkflows", type: :feature do
     expect(page).to have_content("title")
   end
 
-  scenario "list items of a feed" do
+  scenario "list feed items" do
     visit feed_path @feed.id
     expect(page).to have_content("title")
   end

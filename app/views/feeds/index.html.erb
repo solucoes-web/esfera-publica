@@ -1,36 +1,29 @@
-<div class="row">
-  <div class="col-md-3">
-    <%= render "sidebar" %>
-  </div>
-  <div class="col-md-6">
-    <nav class="navbar navbar-default">
-      <%= render 'search' %>
-    </nav>
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <tr>
-          <%= content_tag_for(:tr, @feeds) do |feed| %>
-          <td>
-            <% if feed.favicon %>
-              <%= image_tag feed.favicon, height: '16pt', alt: 'favicon' %>
-            <% end %>
-          </td>
-          <td>
-            <%= link_to raw(feed.name), feed %>
-          </td>
-          <td class='edit'>
-            <%= link_to edit_feed_path(feed), data: {behavior: "modal"} do %>
-              <span class="glyphicon glyphicon-cog"></span>
-            <% end %>
-          </td>
-          <td class="destroy">
-            <%= link_to feed, method: :delete, data: {confirm: 'Are you sure?'} do %>
-              <span class="glyphicon glyphicon-trash"></span>
-            <% end %>
-          </td>
-          <% end %>
-        </tr>
-      </table>
-    </div>
-  </div>
+<nav class="navbar navbar-default">
+  <%= render 'search' %>
+</nav>
+<div class="table-responsive">
+  <table class="table table-hover">
+    <tr>
+      <%= content_tag_for(:tr, @feeds) do |feed| %>
+      <td>
+        <% if feed.favicon %>
+        <%= image_tag feed.favicon, height: '16pt', alt: 'favicon' %>
+        <% end %>
+      </td>
+      <td>
+        <%= link_to raw(feed.name), feed %>
+      </td>
+      <td class='edit'>
+        <%= link_to edit_feed_path(feed), data: {behavior: "modal"} do %>
+        <span class="glyphicon glyphicon-cog"></span>
+        <% end %>
+      </td>
+      <td class="destroy">
+        <%= link_to feed, method: :delete, data: {confirm: 'Are you sure?'} do %>
+        <span class="glyphicon glyphicon-trash"></span>
+        <% end %>
+      </td>
+      <% end %>
+    </tr>
+  </table>
 </div>
