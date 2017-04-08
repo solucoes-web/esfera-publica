@@ -1,0 +1,14 @@
+<div class="navbar-form navbar-left">
+  <%= form_tag items_path(params[:tag]), :method => 'get' do %>
+    <div class="input-group">
+      <%= hidden_field_tag :tag, params[:tag] %>
+      <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "Procurar" %>
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">
+          <span class="glyphicon glyphicon-search"></span>
+        </button>
+      </span>
+      </input>
+    </div>
+  <% end %>
+</div>

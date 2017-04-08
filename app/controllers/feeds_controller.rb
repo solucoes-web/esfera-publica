@@ -4,11 +4,13 @@ class FeedsController < ApplicationController
   # GET /feeds
   # GET /feeds.json
   def index
-    if params[:tag]
-      @feeds = Feed.tagged_with(params[:tag])
+    @search = params[:search] ? Feed.search(params[:search]) : Feed
+
+    unless params[:tag].blank?
       @filter = params[:tag]
+      @feeds = @search.tagged_with(@filter)
     else
-      @feeds = Feed.all
+      @feeds = @search.all
       @filter = 'all'
     end
   end

@@ -11,10 +11,6 @@ RSpec.describe ItemsController, type: :routing do
       expect(:get => "/items/1").to route_to("items#show", id: "1")
     end
 
-    it "routes to #index with TAG parameter" do
-      expect(:get => "/tag/TAG/items").to route_to("items#index", tag: "TAG")
-    end
-
     it "routes to #index on root" do
       expect(:get => "/").to route_to("items#index")
     end

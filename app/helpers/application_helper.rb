@@ -27,8 +27,4 @@ module ApplicationHelper
   def active?(filter)
     'active' if filter == @filter
   end
-
-  def items_count(tag_name)
-    Item.tagged_with(tag_name).count
-  end
 end

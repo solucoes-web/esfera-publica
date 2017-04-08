@@ -8,7 +8,7 @@ RSpec.describe Feed, type: :model do
 
     expect(feed.items).to eq [item]
   end
-  
+
   it "items depend on feed to exist" do
     feed = build(:feed)
     feed.save(validate: false)
@@ -33,6 +33,17 @@ RSpec.describe Feed, type: :model do
       feed.tag_list.add("tag 1, tag 2", parse: true)
       feed.save(validate: false)
     end.to change{Feed.tagged_with("tag 1").count}.by 1
+  end
+
+  it "search keyword" do
+    should_find1 = build(:feed, name: "First test")
+    should_find2 = build(:feed, name: "Second test")
+    should_not_find = build(:feed, name: "Different thing")
+    [should_find1, should_find2].each{ |feed| feed.save(validate: false) }
+
+    expect(Feed.search('test')).to include should_find1
+    expect(Feed.search('test')).to include should_find2
+    expect(Feed.search('test')).not_to include should_not_find
   end
 
   context "mocking internet" do

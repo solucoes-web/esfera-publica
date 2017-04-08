@@ -3,16 +3,16 @@
     <span class="glyphicon glyphicon-plus"></span>
     New Feed
   <% end %>
-  <%= link_to feeds_path, class: "list-group-item  #{active?('all')}" do %>
+  <%= link_to feeds_path(search: params[:search]), class: "list-group-item  #{active?('all')}" do %>
     <span class="badge">
-      <%= Feed.count %>
+      <%= @search.count %>
     </span>
     all
   <% end %>
   <% ActsAsTaggableOn::Tag.most_used.each do |tag| %>
-    <%= link_to tag_feeds_path(tag.name), class: "list-group-item #{active?(tag.name)}" do %>
+    <%= link_to feeds_path(tag: tag.name, search: params[:search]), class: "list-group-item #{active?(tag.name)}" do %>
       <span class="badge">
-        <%= tag.taggings_count %>
+        <%= @search.tagged_with(tag.name).count %>
       </span>
       <%= tag.name %>
     <% end %>

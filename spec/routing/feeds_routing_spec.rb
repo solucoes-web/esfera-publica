@@ -35,9 +35,5 @@ RSpec.describe FeedsController, type: :routing do
       expect(:delete => "/feeds/1").to route_to("feeds#destroy", :id => "1")
     end
 
-    it "routes to #index with TAG parameter" do
-      expect(:get => "/tag/TAG/feeds").to route_to("feeds#index", tag: "TAG")
-    end
-
   end
 end

@@ -3,17 +3,17 @@
     <span class="glyphicon glyphicon-plus"></span>
     New Feed
   <% end %>
-  <%= link_to items_path, class: "list-group-item  #{active?('latest')}" do %>
+  <%= link_to items_path(search: params[:search]), class: "list-group-item  #{active?('latest')}" do %>
     <span class="badge">
-      <%= Item.count %>
+      <%= @search.count %>
     </span>
     <span class="glyphicon glyphicon-time"></span>
     latest
   <% end %>
   <% ActsAsTaggableOn::Tag.most_used.each do |tag| %>
-    <%= link_to tag_items_path(tag.name), class: "list-group-item #{active?(tag.name)}" do %>
+    <%= link_to items_path(tag: tag.name, search: params[:search]), class: "list-group-item #{active?(tag.name)}" do %>
       <span class="badge">
-        <%= items_count(tag.name) %>
+        <%= @search.tagged_with(tag.name).count %>
       </span>
       <span class="glyphicon glyphicon-tag"></span>
       <%= tag.name %>
