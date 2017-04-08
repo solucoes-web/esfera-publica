@@ -1,6 +1,40 @@
 require 'rails_helper'
 
 RSpec.describe Feed, type: :model do
+  it "has many items" do
+    feed = build(:feed)
+    feed.save(validate: false)
+    item = create(:item, feed: feed)
+
+    expect(feed.items).to eq [item]
+  end
+  
+  it "items depend on feed to exist" do
+    feed = build(:feed)
+    feed.save(validate: false)
+    item = create(:item, feed: feed)
+
+    expect do
+      feed.destroy
+    end.to change{Item.count}.by -1
+  end
+
+  it "feed has many tags" do
+    feed = build(:feed)
+    expect do
+      feed.tag_list.add("tag 1, tag 2", parse: true)
+      feed.save(validate: false)
+    end.to change{feed.tags.count}.by 2
+  end
+
+  it "tag has many feeds" do
+    feed = build(:feed)
+    expect do
+      feed.tag_list.add("tag 1, tag 2", parse: true)
+      feed.save(validate: false)
+    end.to change{Feed.tagged_with("tag 1").count}.by 1
+  end
+
   context "mocking internet" do
     before(:each) do
       WebMock.disable_net_connect!(allow_localhost: true)
@@ -12,9 +46,6 @@ RSpec.describe Feed, type: :model do
       # stubing a method
       allow(Feedjira::Feed).to receive(:fetch_and_parse).with("#{@url}/rss").and_return(@rss)
       allow(Feedjira::Feed).to receive(:fetch_and_parse).with(@url).and_throw(Exception)
-    end
-    after(:all) do
-      WebMock.allow_net_connect!
     end
 
     it "does not allow a feed with no url" do
