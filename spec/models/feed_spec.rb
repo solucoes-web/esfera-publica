@@ -1,7 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe Feed, type: :model do
-  it "depends on feed to exists" do
+  it "has many items" do
+    feed = build(:feed)
+    feed.save(validate: false)
+    item = create(:item, feed: feed)
+
+    expect(feed.items).to eq [item]
+  end
+  
+  it "items depend on feed to exist" do
     feed = build(:feed)
     feed.save(validate: false)
     item = create(:item, feed: feed)
@@ -11,12 +19,20 @@ RSpec.describe Feed, type: :model do
     end.to change{Item.count}.by -1
   end
 
-  it "has many items" do
+  it "feed has many tags" do
     feed = build(:feed)
-    feed.save(validate: false)
-    item = create(:item, feed: feed)
+    expect do
+      feed.tag_list.add("tag 1, tag 2", parse: true)
+      feed.save(validate: false)
+    end.to change{feed.tags.count}.by 2
+  end
 
-    expect(feed.items).to eq [item]
+  it "tag has many feeds" do
+    feed = build(:feed)
+    expect do
+      feed.tag_list.add("tag 1, tag 2", parse: true)
+      feed.save(validate: false)
+    end.to change{Feed.tagged_with("tag 1").count}.by 1
   end
 
   context "mocking internet" do

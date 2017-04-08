@@ -5,7 +5,14 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.json
   def index
-    @items = Item.order(published_at: :desc)
+    # acho que seria melhor passar o id de um tag como parametro
+    if params[:tag]
+      @items = Item.tagged_with(params[:tag]).most_recent(20)
+      @filter = params[:tag]
+    else
+      @items = Item.most_recent(20)
+      @filter = 'all'
+    end
   end
 
   # GET /items/1

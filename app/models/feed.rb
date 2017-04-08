@@ -1,5 +1,8 @@
 class Feed < ApplicationRecord
   has_many :items,  dependent: :destroy
+
+  acts_as_taggable
+
   validates :url, :name, presence: true
   validate :persistency_of_url
   validate :well_formed_rss

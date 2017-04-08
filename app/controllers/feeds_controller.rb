@@ -4,7 +4,13 @@ class FeedsController < ApplicationController
   # GET /feeds
   # GET /feeds.json
   def index
-    @feeds = Feed.all
+    if params[:tag]
+      @feeds = Feed.tagged_with(params[:tag])
+      @filter = params[:tag]
+    else
+      @feeds = Feed.all
+      @filter = 'all'
+    end
   end
 
   # GET /feeds/1
@@ -68,6 +74,6 @@ class FeedsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def feed_params
-      params.require(:feed).permit(:name, :url, :favicon)
+      params.require(:feed).permit(:name, :url, :favicon, :tag_list)
     end
 end
