@@ -12,4 +12,7 @@ class Item < ApplicationRecord
   scope :search, ->(keyword) {
     where("items.name LIKE ? OR items.summary LIKE ?", "%#{keyword}%", "%#{keyword}%")
   }
+  scope :feed, ->(feed) {
+    where(feed: feed)
+  }
 end

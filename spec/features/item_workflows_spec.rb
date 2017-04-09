@@ -19,12 +19,12 @@ RSpec.feature "ItemWorkflows", type: :feature do
   end
 
   scenario "list feed items" do
-    visit feed_path @feed.id
+    visit items_path @feed.id
     expect(page).to have_content("title")
   end
 
   scenario "show item" do
-    visit feed_path @feed.id
+    visit items_path @feed.id
     click_link "Ler aqui"
 
     expect(page).to have_css('.modal')

@@ -11,16 +11,17 @@ class FeedsController < ApplicationController
       @feeds = @search.all
       @filter = 'all'
     end
-    @type = "feed"
+    @path = "feeds_path"
   end
 
   # GET /feeds/1
-  def show
-    @items = @feed.items.latest(20)
-    @search = Item
-    @type = "item"
-    render template: "items/index"
-  end
+  # decidi acabar com isso e passar o feed como um parâmetro para items
+#  def show
+#    @items = @feed.items.latest(20)
+#    @search = Item
+#    @path = "items_path"
+#    render template: "items/index"
+#  end
 
   # GET /feeds/new
   def new

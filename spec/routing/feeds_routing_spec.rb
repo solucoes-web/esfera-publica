@@ -11,10 +11,6 @@ RSpec.describe FeedsController, type: :routing do
       expect(:get => "/feeds/new").to route_to("feeds#new")
     end
 
-    it "routes to #show" do
-      expect(:get => "/feeds/1").to route_to("feeds#show", :id => "1")
-    end
-
     it "routes to #edit" do
       expect(:get => "/feeds/1/edit").to route_to("feeds#edit", :id => "1")
     end

@@ -1,6 +1,3 @@
-<nav class="navbar navbar-default">
-  <%= render 'search' %>
-</nav>
 <div class="table-responsive">
   <table class="table table-hover">
     <tr>
@@ -11,7 +8,7 @@
         <% end %>
       </td>
       <td>
-        <%= link_to raw(feed.name), feed %>
+        <%= link_to raw(feed.name), items_path(feed: feed) %>
       </td>
       <td class='edit'>
         <%= link_to edit_feed_path(feed), data: {behavior: "modal"} do %>

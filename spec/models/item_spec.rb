@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Item, type: :model do
+  pending "feed scope"
+
   it "belongs to feed" do
     feed = build(:feed)
     feed.save(validate: false)

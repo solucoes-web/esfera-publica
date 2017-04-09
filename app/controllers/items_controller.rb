@@ -5,14 +5,16 @@ class ItemsController < ApplicationController
   def index
     @search = params[:search] ? Item.search(params[:search]) : Item
 
-    unless params[:tag].blank?
+    if !params[:tag].blank?
       @filter = params[:tag]
       @items = @search.tagged_with(@filter).latest(20)
+    elsif !params[:feed].blank?
+      @items = @search.feed(params[:feed]).latest(20)
     else
       @items = @search.latest(20)
       @filter = 'latest'
     end
-    @type = "item"
+    @path = "items_path"
   end
 
   # GET /items/1
