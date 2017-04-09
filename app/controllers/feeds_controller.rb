@@ -4,7 +4,6 @@ class FeedsController < ApplicationController
   # GET /feeds
   def index
     @search = params[:search] ? Feed.search(params[:search]) : Feed
-
     unless params[:tag].blank?
       @filter = params[:tag]
       @feeds = @search.tagged_with(@filter)

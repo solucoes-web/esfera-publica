@@ -10,7 +10,7 @@ RSpec.feature "Search", type: :feature do
 
     visit root_path
     fill_in "search", with: "test"
-    first(':has(.glyphicon-search)').click
+    first('#search :has(.glyphicon-search)').click
 
     expect(page).to have_content should_find1.name
     expect(page).to have_content should_find2.summary
@@ -25,7 +25,7 @@ RSpec.feature "Search", type: :feature do
 
     visit feeds_path
     fill_in "search", with: "test"
-    first(':has(.glyphicon-search)').click
+    first('#search :has(.glyphicon-search)').click
 
     expect(page).to have_content should_find.name
     expect(page).not_to have_content should_not_find.name
@@ -44,10 +44,32 @@ RSpec.feature "Search", type: :feature do
     visit feeds_path
     click_link "Tag"
     fill_in "search", with: "test"
-    first(':has(.glyphicon-search)').click
+    first('#search :has(.glyphicon-search)').click
 
     expect(page).to have_content should_find.name
     expect(page).not_to have_content should_not_find1.name
     expect(page).not_to have_content should_not_find2.name
+  end
+
+  scenario "clear search" do
+    should_find1 = build(:feed, name: "First test")
+    should_find2 = build(:feed, name: "Different thing")
+    should_not_find = build(:feed, name: "Second test")
+
+    should_find1.tag_list.add("Tag")
+    should_find2.tag_list.add("Tag")
+    [should_find1, should_find2, should_not_find].each do |feed|
+      feed.save(validate: false)
+    end
+
+    visit feeds_path
+    click_link "Tag"
+    fill_in "search", with: "test"
+    first('#search :has(.glyphicon-search)').click
+    first('#search :has(.glyphicon-remove)').click
+
+    expect(page).to have_content should_find1.name
+    expect(page).to have_content should_find2.name
+    expect(page).not_to have_content should_not_find.name
   end
 end

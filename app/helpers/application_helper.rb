@@ -24,7 +24,7 @@ module ApplicationHelper
     number == 1 ? "1 #{string}" : "#{number} #{string}s"
   end
 
-  def active?(filter)
+  def filter_active?(filter)
     'active' if filter == @filter
   end
 end
