@@ -14,7 +14,7 @@ RSpec.feature "Tags", type: :feature do
       feed = build(:feed, url: "http://feeds.folha.uol.com.br/folha/emcimadahora/rss091.xml")
       feed.save(validate: false)
       visit feeds_path
-      first(':has(.glyphicon-cog)').click
+      first('#feeds-list :has(.glyphicon-cog)').click
 
       fill_in "Tags", with: "tag1, tag2"
       expect do

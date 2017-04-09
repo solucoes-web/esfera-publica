@@ -4,6 +4,10 @@ class ItemsController < ApplicationController
   # GET /items
   def index
     @search = params[:search] ? Item.search(params[:search]) : Item
+    unless params[:calendar].blank?
+      date = Date.strptime(params[:calendar], "%d/%m/%Y")
+      @search = @search.date_published(date)
+    end
 
     if !params[:tag].blank?
       @filter = params[:tag]
@@ -12,7 +16,7 @@ class ItemsController < ApplicationController
       @items = @search.feed(params[:feed]).latest(20)
     else
       @items = @search.latest(20)
-      @filter = 'latest'
+      @filter = 'all'
     end
     @path = "items_path"
   end
