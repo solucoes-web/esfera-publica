@@ -15,4 +15,7 @@ class Item < ApplicationRecord
   scope :feed, ->(feed) {
     where(feed: feed)
   }
+  scope :date_published, ->(date) {
+    where("published_at <= ?", date)
+  }
 end

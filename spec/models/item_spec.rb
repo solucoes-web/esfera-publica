@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Item, type: :model do
-  pending "feed scope"
-
   it "belongs to feed" do
     feed = build(:feed)
     feed.save(validate: false)
@@ -43,5 +41,34 @@ RSpec.describe Item, type: :model do
     expect(Item.search('test')).to include should_find1
     expect(Item.search('test')).to include should_find2
     expect(Item.search('test')).not_to include should_not_find
+  end
+
+  it "filters by feed" do
+    feed1 = build(:feed, name: "Primeiro feed")
+    feed2 = build(:feed, name: "Segundo feed")
+    [feed1, feed2].each{|feed| feed.save(validate: false)}
+
+    should_find1 = create(:item, feed: feed1, name: "First test")
+    should_find2 = create(:item, feed: feed1, summary: "Second test")
+    should_not_find1 = create(:item, feed: feed2, name: "Different thing")
+    should_not_find2 = create(:item, feed: feed2, name: "Another thing")
+
+    expect(Item.feed(feed1)).to include should_find1
+    expect(Item.feed(feed1)).to include should_find2
+    expect(Item.feed(feed1)).not_to include should_not_find1
+    expect(Item.feed(feed1)).not_to include should_not_find2
+  end
+
+  it "filters by date published" do
+    (feed = build(:feed)).save(validate: false)
+    should_find1 = create(:item, feed: feed, published_at: 4.days.ago, name: "Primeiro")
+    should_find2 = create(:item, feed: feed, published_at: 5.days.ago, name: "Segundo")
+    should_not_find1 = build(:item, feed: feed, published_at: 1.days.ago, name: "Terceiro")
+    should_not_find2 = build(:item, feed: feed, published_at: 2.days.ago, name: "Quarto")
+
+    expect(Item.date_published(3.days.ago)).to include should_find1
+    expect(Item.date_published(3.days.ago)).to include should_find2
+    expect(Item.date_published(3.days.ago)).not_to include should_not_find1
+    expect(Item.date_published(3.days.ago)).not_to include should_not_find2
   end
 end

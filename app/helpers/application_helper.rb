@@ -27,4 +27,11 @@ module ApplicationHelper
   def filter_active?(filter)
     'active' if filter == @filter
   end
+
+  def safe_params(options = [:tag, :feed, :date, :search], hash = {}, params)
+    options.each do |option|
+      hash[option] = params[option] unless params[option].blank?
+    end
+    hash
+  end
 end

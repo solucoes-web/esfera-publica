@@ -4,6 +4,10 @@ class ItemsController < ApplicationController
   # GET /items
   def index
     @search = params[:search] ? Item.search(params[:search]) : Item
+    unless params[:calendar].blank?
+      date = Date.strptime(params[:calendar], "%d/%m/%Y")
+      @search = @search.date_published(date)
+    end
 
     if !params[:tag].blank?
       @filter = params[:tag]

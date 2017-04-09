@@ -38,7 +38,7 @@ RSpec.feature "FeedWorkflows", type: :feature do
     feed = build(:feed, name: "Test")
     feed.save(validate: false)
     visit feeds_path
-    first(':has(.glyphicon-cog)').click
+    first('#feeds-list :has(.glyphicon-cog)').click
 
     expect(find_field('Name').value).to eq 'Test'
     expect(page).to have_field('Url', disabled: true)
