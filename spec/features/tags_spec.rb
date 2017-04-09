@@ -32,7 +32,7 @@ RSpec.feature "Tags", type: :feature do
     tagged_item = create(:item, name: "Tagged Item", feed: tagged_feed)
     simple_item = create(:item, name: "Simple Item", feed: simple_feed)
 
-    visit tag_items_path "Tag"
+    visit items_path(tag: "Tag")
 
     expect(page).to have_content "Tagged Item"
     expect(page).not_to have_content "Simple Item"
@@ -44,7 +44,7 @@ RSpec.feature "Tags", type: :feature do
     simple_feed = build(:feed, name: "Simple Feed")
     [tagged_feed, simple_feed].each{|feed| feed.save(validate: false)}
 
-    visit tag_feeds_path "Tag"
+    visit feeds_path(tag: "Tag")
 
     expect(page).to have_content "Tagged Feed"
     expect(page).not_to have_content "Simple Feed"

@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "feeds/index", type: :view do
   before(:each) do
+    assign(:search, Feed)
     assign(:feeds, (1..2).map{ build_stubbed(:feed) })
   end
 

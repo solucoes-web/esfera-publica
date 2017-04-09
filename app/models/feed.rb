@@ -7,6 +7,10 @@ class Feed < ApplicationRecord
   validate :persistency_of_url
   validate :well_formed_rss
 
+  scope :search, ->(keyword) {
+    where("name LIKE ?", "%#{keyword}%")
+  }
+
   before_validation do
     begin
       @rss = Feedjira::Feed.fetch_and_parse url # tenta fazer o parse do RSS
