@@ -12,7 +12,7 @@ class ItemsController < ApplicationController
       @items = @search.feed(params[:feed]).latest(20)
     else
       @items = @search.latest(20)
-      @filter = 'latest'
+      @filter = 'all'
     end
     @path = "items_path"
   end
