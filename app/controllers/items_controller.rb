@@ -5,7 +5,11 @@ class ItemsController < ApplicationController
   def index
     @search = params[:search] ? Item.search(params[:search]) : Item
     unless params[:calendar].blank?
-      date = Date.strptime(params[:calendar], "%d/%m/%Y")
+      begin
+        date = Date.strptime(params[:calendar], "%d/%m/%Y")
+      rescue
+        redirect_to items_path, error: "Data inválida"
+      end
       @search = @search.date_published(date)
     end
 
