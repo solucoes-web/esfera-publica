@@ -17,9 +17,5 @@ Consulte o [plano de trabalho](https://docs.google.com/presentation/d/1jxLIZcn9u
 
 * clone o repositorio:
   * `git clone https://github.com/solucoes-web/esfera-publica.git`
-* gere uma chave para cada `secret_key_base` em `config/secrets.sample.yml` usando o comando:
-  * `rake secret` 
-* renomeie o arquivo `config/secrets.sample.yml` para `config/secrets.yml`:
-  * `mv config/secrets.sample.yml config/secrets.yml`
 * rode as migrações:
   * `rake db:migrate`

@@ -2,10 +2,13 @@
   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
-  <h4 class="modal-title" id="myModalLabel">
+  <h3 class="modal-title" id="myModalLabel">
     <%= link_to @item.name, @item.url %>
-  </h4>
+  </h3>
 </div>
-<div class="modal-body">
-  <%= sanitize @item.summary %>
+<div class="modal-body text-justify">
+  <% if @item.image %>
+    <%= image_tag @item.image, class: 'item-img img-thumbnail', align: 'left' %>
+  <% end %>
+  <%= sanitize (@item.content || @item.summary), tags: %w(strong em a p), attributes: %w(href) %>
 </div>

@@ -18,3 +18,10 @@
 .item-date{
   color: gray
 }
+.item-img{
+  margin-right: 20px;
+}
+.item{
+  display: inline-block;
+  margin-bottom: 20px;
+}
