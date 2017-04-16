@@ -4,6 +4,10 @@ FactoryGirl.define do
     sequence :url do |n|
       "http://example.org/#{n}.rss"
     end
+
+    after(:build) do |feed|
+      mock_request(feed.url) if feed.url
+    end
   end
 
   factory :item do
@@ -15,5 +19,9 @@ FactoryGirl.define do
     end
     published_at 3.days.ago
     sequence(:guid)
+
+    after(:build) do |item|
+      mock_request(item.url) if item.url
+    end
   end
 end

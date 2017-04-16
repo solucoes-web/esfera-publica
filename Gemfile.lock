@@ -107,6 +107,7 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
+    guess_html_encoding (0.0.11)
     hashdiff (0.3.2)
     i18n (0.8.1)
     jbuilder (2.6.3)
@@ -213,6 +214,9 @@ GEM
       rspec-mocks (~> 3.5.0)
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
+    ruby-readability (0.7.0)
+      guess_html_encoding (>= 0.0.4)
+      nokogiri (>= 1.6.0)
     safe_yaml (1.0.4)
     sanitize (4.4.0)
       crass (~> 1.0.2)
@@ -291,6 +295,7 @@ DEPENDENCIES
   rails (~> 5.0.2)
   record_tag_helper
   rspec-rails
+  ruby-readability
   sass-rails (~> 5.0)
   spring
   spring-watcher-listen (~> 2.0.0)

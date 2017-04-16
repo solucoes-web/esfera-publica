@@ -132,7 +132,9 @@ RSpec.describe Feed, type: :model do
                       summary: 'summary',
                       url: 'http://example.com',
                       published: 3.day.ago,
-                      id: 1)
+                      id: 1,
+                      image: 'http://example.com/img.png')
+      mock_request(@entry.url)
     end
 
     it "adds items" do

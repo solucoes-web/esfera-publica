@@ -1,11 +1,6 @@
 require 'rails_helper'
 
 RSpec.feature "ItemWorkflows", type: :feature do
-  before :all do
-    WebMock.disable_net_connect!(allow_localhost: true)
-    stub_request(:get, 'http://example.org').to_return(status: 200)
-  end
-
   before :each do
     clean_db
     @feed = build(:feed, url: "http://example.org")

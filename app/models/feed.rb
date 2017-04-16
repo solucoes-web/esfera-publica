@@ -46,8 +46,8 @@ class Feed < ApplicationRecord
                       summary: entry.summary,
                       url: entry.url,
                       published_at: (entry.published || Time.now),
-                      guid: entry.id)
-        # pegar uma imagem para cada item
+                      guid: entry.id,
+                      image: entry.image)
       end
     end
   end

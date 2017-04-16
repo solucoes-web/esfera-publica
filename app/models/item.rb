@@ -18,4 +18,12 @@ class Item < ApplicationRecord
   scope :date_published, ->(date) {
     where("published_at <= ?", date)
   }
+
+  before_save do
+    begin
+      self.content = Readability::Document.new(open(url).read).content
+    rescue
+      logger.info "Could not open #{url}"
+    end
+  end
 end

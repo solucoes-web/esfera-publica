@@ -14,11 +14,16 @@
     <h6 class="media-heading item-date">
       <%= default_date_format item.published_at %>
     </h6>
-    <div class="item-summary">
-      <%= sanitize item.summary %>
+    <div class="item">
+      <% if item.image %>
+        <%= image_tag item.image, width: '50%', class: 'item-img img-thumbnail', align: 'left' %>
+      <% end %>
+      <div class="item-summary">
+        <%= sanitize item.summary %>
+      </div>
     </div>
     <br/>
-    <div class="btn-group pull-right" role="group">
+    <div class="btn-group" role="group">
       <%= link_to item,  data: {behavior: "modal"} do %>
       <button type='button', class='btn btn-primary'>
         Ler aqui
