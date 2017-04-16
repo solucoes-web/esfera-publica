@@ -45,8 +45,9 @@ class Feed < ApplicationRecord
         items.create!(name: entry.title,
                       summary: entry.summary,
                       url: entry.url,
-                      published_at: entry.published,
+                      published_at: (entry.published || Time.now),
                       guid: entry.id)
+        # pegar uma imagem para cada item
       end
     end
   end
