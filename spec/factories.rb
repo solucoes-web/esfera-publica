@@ -6,7 +6,10 @@ FactoryGirl.define do
     end
 
     after(:build) do |feed|
-      mock_request(feed.url) if feed.url
+      if feed.url
+        mock_request(feed.url)
+#        allow(Feedjira::Feed).to receive(:fetch_and_parse).with(feed.url).and_return(nil)
+      end
     end
   end
 

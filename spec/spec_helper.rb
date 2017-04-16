@@ -27,8 +27,8 @@ def clean_db
   DatabaseCleaner.clean_with(:truncation)
 end
 
-def mock_request(url)
-  WebMock.stub_request(:get, url).to_return(status: 200)
+def mock_request(url, content=nil)
+  WebMock.stub_request(:get, url).to_return(status: 200, body: content)
 end
 
 RSpec.configure do |config|

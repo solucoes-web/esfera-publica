@@ -2,8 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Item, type: :model do
   it "belongs to feed" do
-    feed = build(:feed)
-    feed.save(validate: false)
+    (feed = build(:feed)).save(validate: false)
     item = create(:item, feed: feed)
     expect(item.feed).to eq feed
   end
@@ -70,5 +69,29 @@ RSpec.describe Item, type: :model do
     expect(Item.date_published(3.days.ago)).to include should_find2
     expect(Item.date_published(3.days.ago)).not_to include should_not_find1
     expect(Item.date_published(3.days.ago)).not_to include should_not_find2
+  end
+
+  it "gets image from open graph" do
+    (feed = build(:feed)).save(validate: false)
+    img = 'http://example.com/imgs'
+    og = double(:og, images: [img])
+    url = 'http://example.com'
+    mock_request(url)
+    allow(OpenGraph).to receive(:new).with("").and_return(og)
+    item = create(:item, feed: feed, url: url)
+
+    expect(item.image).to eq img
+  end
+
+  it "gets content from item page" do
+    (feed = build(:feed)).save(validate: false)
+    content = "Lorem ipsum"
+    readability = double(:readability, content: content)
+    url = 'http://example.com'
+    mock_request(url)
+    allow(Readability::Document).to receive(:new).with("").and_return(readability)
+    item = create(:item, feed: feed, url: url)
+
+    expect(item.content).to eq content
   end
 end

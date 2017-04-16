@@ -2,16 +2,14 @@ require 'rails_helper'
 
 RSpec.describe Feed, type: :model do
   it "has many items" do
-    feed = build(:feed)
-    feed.save(validate: false)
+    (feed = build(:feed)).save(validate: false)
     item = create(:item, feed: feed)
 
     expect(feed.items).to eq [item]
   end
 
   it "items depend on feed to exist" do
-    feed = build(:feed)
-    feed.save(validate: false)
+    (feed = build(:feed)).save(validate: false)
     item = create(:item, feed: feed)
 
     expect do

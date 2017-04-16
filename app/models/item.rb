@@ -21,7 +21,9 @@ class Item < ApplicationRecord
 
   before_save do
     begin
-      self.content = Readability::Document.new(open(url).read).content
+      html = open(url).read
+      self.image ||= OpenGraph.new(html).images.first
+      self.content = Readability::Document.new(html).content
     rescue
       logger.info "Could not open #{url}"
     end
