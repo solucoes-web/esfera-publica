@@ -77,4 +77,5 @@ gem 'pismo'
 gem 'acts-as-taggable-on'
 gem 'jquery-ui-rails'
 gem 'ruby-readability', require: 'readability'
-gem "opengraph_parser"
+gem 'opengraph_parser'
+gem 'ots'
