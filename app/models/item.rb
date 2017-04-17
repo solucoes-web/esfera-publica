@@ -22,10 +22,11 @@ class Item < ApplicationRecord
   before_save do
     begin
       html = open(url).read
+    #  self.image ||= (/property="og:image" content="(.+)"/.match html)[1]
       self.image ||= OpenGraph.new(html).images.first
       self.content = Readability::Document.new(html).content
-    rescue
-      logger.info "Could not open #{url}"
+    rescue Exception => e
+      logger.info e.message
     end
   end
 end

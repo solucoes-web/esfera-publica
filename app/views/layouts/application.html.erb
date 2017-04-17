@@ -100,14 +100,14 @@
           <% end %>
           <%= link_to send(@path, safe_params([:calendar, :search], params)), class: "list-group-item #{filter_active?('all')}" do %>
             <span class="badge">
-              <%= @search.count %>
+              <%= human_readable_number @search.count %>
             </span>
             all
           <% end %>
           <% ActsAsTaggableOn::Tag.most_used.each do |tag| %>
             <%= link_to send(@path, safe_params([:calendar, :search], {tag: tag.name}, params)), class: "list-group-item #{filter_active?(tag.name)}" do %>
               <span class="badge">
-                <%= @search.tagged_with(tag.name).count %>
+                <%= human_readable_number @search.tagged_with(tag.name).count %>
               </span>
               <%= tag.name %>
             <% end %>
