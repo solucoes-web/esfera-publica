@@ -16,6 +16,16 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+
+
+def clean_db
+  DatabaseCleaner.clean_with(:truncation)
+end
+
+def mock_request(url, content=nil)
+  WebMock.stub_request(:get, url).to_return(status: 200, body: content)
+end
+
 RSpec.configure do |config|
 config.before(:suite) do
   DatabaseCleaner.strategy = :transaction

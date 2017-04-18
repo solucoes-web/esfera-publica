@@ -1,4 +1,7 @@
 class Feed < ApplicationRecord
+  has_many :items, dependent: :destroy
+  validates :url, :name, presence: true
+
   def get_basic_info
     begin
       f = Feedjira::Feed.fetch_and_parse url
@@ -10,7 +13,6 @@ class Feed < ApplicationRecord
   end
 
   private
-
   def get_host_info
     pismo = Pismo[url]
     self.favicon = pismo.favicon
