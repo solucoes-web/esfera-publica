@@ -147,7 +147,6 @@ GEM
     opengraph_parser (0.2.3)
       addressable
       nokogiri
-    ots (0.5.4)
     pg (0.20.0)
     pismo (0.7.4)
       awesome_print
@@ -293,7 +292,6 @@ DEPENDENCIES
   jquery-ui-rails
   listen (~> 3.0.5)
   opengraph_parser
-  ots
   pg
   pismo
   poltergeist
