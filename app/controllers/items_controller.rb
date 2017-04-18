@@ -1,5 +1,6 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: :show
+  before_action :authenticate_user!
 
   # GET /items
   def index
@@ -23,6 +24,7 @@ class ItemsController < ApplicationController
       @filter = 'all'
     end
     @path = "items_path"
+    render layout: 'main'
   end
 
   # GET /items/1

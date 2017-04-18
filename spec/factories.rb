@@ -1,5 +1,6 @@
 FactoryGirl.define do
   factory :feed do
+#    user
     name "Name"
     sequence :url do |n|
       "http://example.org/#{n}.rss"
@@ -26,5 +27,12 @@ FactoryGirl.define do
     after(:build) do |item|
       mock_request(item.url) if item.url
     end
+  end
+
+  factory :user do
+    sequence :email do |n|
+      "email#{n}@example.org"
+    end
+    password 'password'
   end
 end

@@ -1,5 +1,6 @@
 class FeedsController < ApplicationController
   before_action :set_feed, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   # GET /feeds
   def index
@@ -12,16 +13,8 @@ class FeedsController < ApplicationController
       @filter = 'all'
     end
     @path = "feeds_path"
+    render layout: 'main'
   end
-
-  # GET /feeds/1
-  # decidi acabar com isso e passar o feed como um parâmetro para items
-#  def show
-#    @items = @feed.items.latest(20)
-#    @search = Item
-#    @path = "items_path"
-#    render template: "items/index"
-#  end
 
   # GET /feeds/new
   def new
