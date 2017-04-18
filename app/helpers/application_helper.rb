@@ -20,6 +20,10 @@ module ApplicationHelper
     end
   end
 
+  def human_readable_number(n)
+    n > 1000 ? "#{(n.to_f/1000).round(1)} K" : n
+  end
+
   def pluralize(string, number)
     number == 1 ? "1 #{string}" : "#{number} #{string}s"
   end
