@@ -1,0 +1,16 @@
+<%= form_tag send(@path), :method => 'get', id: "search", class: "navbar-form navbar-left", role: "search" do %>
+  <div class="form-group">
+    <%= hidden_field_tag :feed, params[:feed] if params[:feed] %>
+    <%= hidden_field_tag :tag, params[:tag] if params[:tag] %>
+    <%= hidden_field_tag :calendar, params[:calendar] if params[:calendar] %>
+    <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "Procurar" %>
+  </div>
+  <span>
+    <button class="btn btn-default" type="submit">
+      <span class="glyphicon glyphicon-search"></span>
+    </button>
+    <%= link_to send(@path, safe_params([:calendar, :feed, :tag], params)), class: "btn btn-default #{"disabled" unless params[:search]}" do %>
+      <span class="glyphicon glyphicon-remove"></span>
+    <% end %>
+  </span>
+<% end %>

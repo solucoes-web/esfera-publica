@@ -1,9 +1,11 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: :show
+  before_action :authenticate_user!
 
   # GET /items
   def index
-    @search = params[:search] ? Item.search(params[:search]) : Item
+    @search = current_user.items
+    @search = @search.search(params[:search]) if params[:search]
     unless params[:calendar].blank?
       begin
         date = Date.strptime(params[:calendar], "%d/%m/%Y")
@@ -23,6 +25,7 @@ class ItemsController < ApplicationController
       @filter = 'all'
     end
     @path = "items_path"
+    render layout: 'main'
   end
 
   # GET /items/1

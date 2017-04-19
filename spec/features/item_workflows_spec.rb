@@ -3,7 +3,9 @@ require 'rails_helper'
 RSpec.feature "ItemWorkflows", type: :feature do
   before :each do
     clean_db
-    @feed = build(:feed, url: "http://example.org")
+    @user = create(:user)
+    sign_in @user
+    @feed = build(:feed, users: [@user], url: "http://example.org")
     @feed.save(validate: false)
     @item = create(:item, feed: @feed, name: "title")
   end

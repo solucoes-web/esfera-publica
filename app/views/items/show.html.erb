@@ -11,4 +11,5 @@
     <%= image_tag @item.image, class: 'item-img img-thumbnail', align: 'left' %>
   <% end %>
   <%= sanitize (@item.content || @item.summary), tags: %w(strong em a p), attributes: %w(href) %>
+  Palavras-chave: <%#= @item.keyword_list %>
 </div>
