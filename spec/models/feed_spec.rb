@@ -17,6 +17,15 @@ RSpec.describe Feed, type: :model do
     end.to change{Item.count}.by -1
   end
 
+  it "has many users" do
+    user = create(:user)
+    feed = build(:feed)
+    feed.users << user
+    feed.save(validate: false)
+    
+    expect(feed.users).to eq [user]
+  end
+
   it "feed has many tags" do
     feed = build(:feed)
     expect do

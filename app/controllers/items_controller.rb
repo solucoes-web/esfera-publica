@@ -4,7 +4,8 @@ class ItemsController < ApplicationController
 
   # GET /items
   def index
-    @search = params[:search] ? Item.search(params[:search]) : Item
+    @search = current_user.items
+    @search = @search.search(params[:search]) if params[:search]
     unless params[:calendar].blank?
       begin
         date = Date.strptime(params[:calendar], "%d/%m/%Y")

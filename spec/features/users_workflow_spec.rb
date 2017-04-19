@@ -18,22 +18,29 @@ RSpec.feature "UserWorkflows", type: :feature do
   end
 
   scenario "login" do
-    login
+    user = create(:user)
+    visit new_user_session_path
+
+    fill_in 'Email', with: user.email
+    fill_in 'Password', with: user.password
+    click_on 'Log in'
 
     expect(page).to have_content("Signed in successfully.")
   end
 
   scenario "logout" do
-    login
+    sign_in create(:user)
+    visit root_path
     first(':has(.glyphicon-user)').click
-    click_link "Logout"
+    click_link "Sign out"
 
-    expect(page).to have_content("Signed out successfully")
+    expect(page).to have_current_path(new_user_session_path)
   end
 
   scenario "visit costumized page" do
-    user = login
-    (feed = build(:feed, user: user)).save(validate: false)
+    user = create(:user)
+    sign_in user
+    (feed = build(:feed, users: [user])).save(validate: false)
     item = create(:item, feed: feed, name: "Titulo")
 
     visit root_path
@@ -42,11 +49,11 @@ RSpec.feature "UserWorkflows", type: :feature do
 
   scenario "visit inaccessible page" do
     user = create(:user)
-    (feed = build(:feed, user: user)).save(validate: false)
+    (feed = build(:feed, users: [user])).save(validate: false)
     item = create(:item, feed: feed, name: "Titulo")
 
     visit root_path
-    expect(page).not_to have_content(item.name)
+    expect(page).to have_current_path(new_user_session_path)
   end
 
 end

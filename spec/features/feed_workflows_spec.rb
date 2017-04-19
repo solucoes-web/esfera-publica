@@ -7,6 +7,8 @@ RSpec.feature "FeedWorkflows", type: :feature do
 
   before :each do
     clean_db
+    @user = create(:user)
+    sign_in @user
   end
 
   scenario "Register new feed" do
@@ -14,7 +16,7 @@ RSpec.feature "FeedWorkflows", type: :feature do
       visit feeds_path
       click_link "New Feed"
 
-      fill_in "Name", with: "Folha de São Paulo"
+#      fill_in "Name", with: "Folha de São Paulo"
       fill_in "Url", with: "http://feeds.folha.uol.com.br/folha/emcimadahora/rss091.xml"
       expect do
         click_button "Register"
@@ -25,7 +27,7 @@ RSpec.feature "FeedWorkflows", type: :feature do
 
   scenario "Destroy feed" do
     3.times do
-      feed = build(:feed)
+      feed = build(:feed, users: [@user])
       feed.save(validate: false)
     end
     visit feeds_path
@@ -35,12 +37,12 @@ RSpec.feature "FeedWorkflows", type: :feature do
   end
 
   scenario "Edit feed" do
-    feed = build(:feed, name: "Test")
+    feed = build(:feed, users: [@user], name: "Test")
     feed.save(validate: false)
     visit feeds_path
     first('#feeds-list :has(.glyphicon-cog)').click
 
-    expect(find_field('Name').value).to eq 'Test'
+#    expect(find_field('Name').value).to eq 'Test'
     expect(page).to have_field('Url', disabled: true)
   end
 

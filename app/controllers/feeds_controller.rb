@@ -4,7 +4,8 @@ class FeedsController < ApplicationController
 
   # GET /feeds
   def index
-    @search = params[:search] ? Feed.search(params[:search]) : Feed
+    @search = current_user.feeds
+    @search = @search.search(params[:search]) if params[:search]
     unless params[:tag].blank?
       @filter = params[:tag]
       @feeds = @search.tagged_with(@filter)
@@ -24,13 +25,17 @@ class FeedsController < ApplicationController
 
   # GET /feeds/1/edit
   def edit
+    @feed.tag_list = @feed.tags_from(current_user).join(', ')
     render layout: "modal"
   end
 
   # POST /feeds
   def create
-    @feed = Feed.new(feed_params)
+    @feed = Feed.find_or_initialize_by(url: feed_params[:url])
+
     if @feed.save
+      current_user.feeds << @feed
+      current_user.tag(@feed, with: feed_params[:tag_list], on: :tags)
       redirect_to feeds_path, notice: 'Feed was successfully created.'
     else
       render :new, error: @feed.errors.messages
@@ -39,11 +44,8 @@ class FeedsController < ApplicationController
 
   # PATCH/PUT /feeds/1
   def update
-    if @feed.update(feed_params)
-      redirect_to feeds_path, notice: 'Feed was successfully updated.'
-    else
-      render :edit
-    end
+    current_user.tag(@feed, with: feed_params[:tag_list], on: :tags)
+    redirect_to feeds_path, notice: 'Feed was successfully updated.'
   end
 
   # DELETE /feeds/1

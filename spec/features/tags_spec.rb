@@ -7,11 +7,13 @@ RSpec.feature "Tags", type: :feature do
 
   before :each do
     clean_db
+    @user = create(:user)
+    sign_in @user
   end
 
   scenario "create a new tag for specific feed" do
     VCR.use_cassette "folha" do
-      feed = build(:feed, url: "http://feeds.folha.uol.com.br/folha/emcimadahora/rss091.xml")
+      feed = build(:feed, users: [@user], url: "http://feeds.folha.uol.com.br/folha/emcimadahora/rss091.xml")
       feed.save(validate: false)
       visit feeds_path
       first('#feeds-list :has(.glyphicon-cog)').click
@@ -24,9 +26,9 @@ RSpec.feature "Tags", type: :feature do
   end
 
   scenario "filter items using tag" do
-    tagged_feed = build(:feed, name: "Tagged Feed")
-    tagged_feed.tag_list.add("Tag")
-    simple_feed = build(:feed, name: "Simple Feed")
+    tagged_feed = build(:feed, users: [@user], name: "Tagged Feed")
+    simple_feed = build(:feed, users: [@user], name: "Simple Feed")
+    @user.tag(tagged_feed, with: "Tag", on: :tags)
     [tagged_feed, simple_feed].each{|feed| feed.save(validate: false)}
 
     tagged_item = create(:item, name: "Tagged Item", feed: tagged_feed)
@@ -39,9 +41,9 @@ RSpec.feature "Tags", type: :feature do
   end
 
   scenario "filter feeds using tag" do
-    tagged_feed = build(:feed, name: "Tagged Feed")
-    tagged_feed.tag_list.add("Tag")
-    simple_feed = build(:feed, name: "Simple Feed")
+    tagged_feed = build(:feed, users: [@user], name: "Tagged Feed")
+    simple_feed = build(:feed, users: [@user], name: "Simple Feed")
+    @user.tag(tagged_feed, with: "Tag", on: :tags)
     [tagged_feed, simple_feed].each{|feed| feed.save(validate: false)}
 
     visit feeds_path(tag: "Tag")
@@ -51,11 +53,23 @@ RSpec.feature "Tags", type: :feature do
   end
 
   scenario "list tags in sidebar" do
-    feed = build(:feed, name: "Feed")
-    feed.tag_list.add("Tag")
+    feed = build(:feed, users: [@user], name: "Feed")
+    @user.tag(feed, with: "Tag", on: :tags)
     feed.save(validate: false)
     visit root_path
 
     expect(page).to have_content "Tag"
+  end
+
+  scenario "list only owned tags" do
+    other = create(:user)
+    feed = build(:feed, users: [@user, other])
+    @user.tag(feed, with: "My tag", on: :tags)
+    other.tag(feed, with: "His tag", on: :tags)
+    feed.save(validate: false)
+    visit root_path
+
+    expect(page).to have_content "My tag"
+    expect(page).not_to have_content "His tag"
   end
 end

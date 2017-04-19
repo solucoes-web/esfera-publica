@@ -1,6 +1,7 @@
 class Item < ApplicationRecord
   belongs_to :feed
 
+  #  preciso filtrar pelo usuário
   scope :tagged_with, ->(tag) {
        joins("INNER JOIN taggings ON taggings.taggable_id = items.feed_id\
               INNER JOIN tags ON tags.id = taggings.tag_id AND\
