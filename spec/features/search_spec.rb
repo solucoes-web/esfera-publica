@@ -1,8 +1,13 @@
 require 'rails_helper'
 
 RSpec.feature "Search", type: :feature do
+  before :each do
+      @user = create(:user)
+      sign_in @user
+  end
+
   scenario "search items" do
-    (feed = build(:feed)).save(validate: false)
+    (feed = build(:feed, users: [@user])).save(validate: false)
     should_find1 = create(:item, feed: feed, name: "First test")
     should_find2 = create(:item, feed: feed, summary: "Second test")
     should_not_find1 = create(:item, feed: feed, name: "Diferent thing")
@@ -19,8 +24,8 @@ RSpec.feature "Search", type: :feature do
   end
 
   scenario "search feeds" do
-    should_find = build(:feed, name: "First test")
-    should_not_find = build(:feed, name: "Different thing")
+    should_find = build(:feed, users: [@user], name: "First test")
+    should_not_find = build(:feed, users: [@user], name: "Different thing")
     [should_find, should_not_find].each{ |feed| feed.save(validate: false) }
 
     visit feeds_path
@@ -32,11 +37,12 @@ RSpec.feature "Search", type: :feature do
   end
 
   scenario "search feed inside tag" do
-    should_find = build(:feed, name: "First test")
-    should_not_find1 = build(:feed, name: "Second test")
-    should_not_find2 = build(:feed, name: "Different thing")
-    should_find.tag_list.add("Tag")
-    should_not_find2.tag_list.add("Tag")
+    should_find = build(:feed, users: [@user], name: "First test")
+    should_not_find1 = build(:feed, users: [@user], name: "Second test")
+    should_not_find2 = build(:feed, users: [@user], name: "Different thing")
+    @user.tag(should_find, with: "Tag", on: :tags)
+    @user.tag(should_not_find2, with: "Tag", on: :tags)
+
     [should_find, should_not_find1, should_not_find2].each do |feed|
       feed.save(validate: false)
     end
@@ -52,12 +58,12 @@ RSpec.feature "Search", type: :feature do
   end
 
   scenario "clear search" do
-    should_find1 = build(:feed, name: "First test")
-    should_find2 = build(:feed, name: "Different thing")
-    should_not_find = build(:feed, name: "Second test")
+    should_find1 = build(:feed, users: [@user], name: "First test")
+    should_find2 = build(:feed, users: [@user], name: "Different thing")
+    should_not_find = build(:feed, users: [@user], name: "Second test")
 
-    should_find1.tag_list.add("Tag")
-    should_find2.tag_list.add("Tag")
+    @user.tag(should_find1, with: "Tag", on: :tags)
+    @user.tag(should_find2, with: "Tag", on: :tags)
     [should_find1, should_find2, should_not_find].each do |feed|
       feed.save(validate: false)
     end
