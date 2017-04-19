@@ -1,5 +1,6 @@
 class Feed < ApplicationRecord
   has_many :items,  dependent: :destroy
+  has_and_belongs_to_many :users
 
   acts_as_taggable
 
@@ -12,6 +13,7 @@ class Feed < ApplicationRecord
   }
 
   before_validation do
+    self.tag_list = "" # remove as tags órfãs
     begin
       @rss = Feedjira::Feed.fetch_and_parse url # tenta fazer o parse do RSS
     rescue

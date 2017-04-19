@@ -71,10 +71,12 @@ group :test do
 end
 
 gem 'bootstrap-generators', '~> 3.3.4'
-gem 'feedjira'
+gem 'feedjira' # parse RSS
 gem 'record_tag_helper'
-gem 'pismo'
-gem 'acts-as-taggable-on'
-gem 'jquery-ui-rails'
-gem 'ruby-readability', require: 'readability'
-gem "opengraph_parser"
+gem 'pismo' # extrai metadados da página html (e.g. favicon)
+gem 'acts-as-taggable-on' # tags para os feeds e para os itens (keywords)
+gem 'jquery-ui-rails' # para o calendário
+gem 'ruby-readability', require: 'readability' # versão legível da página
+gem 'opengraph_parser' # metatags opengraph
+gem 'ots' # keywords
+gem 'devise' # authenticação de usuários

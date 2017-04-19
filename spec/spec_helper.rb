@@ -31,6 +31,13 @@ def mock_request(url, content=nil)
   WebMock.stub_request(:get, url).to_return(status: 200, body: content)
 end
 
+def sign_in(user)
+  visit new_user_session_path
+  fill_in 'Email', with: user.email
+  fill_in 'Password', with: user.password
+  click_on 'Log in'
+end
+
 RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction

@@ -18,69 +18,6 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"  aria-controls="navbar" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <%= link_to "Esfera Pública", root_path, class: "navbar-brand" %>
-      </div>
-      <div class="collapse navbar-collapse" id="navbar">
-        <%= link_to items_path do %>
-        <button type="button" class="btn btn-default navbar-btn">
-          <span class="glyphicon glyphicon-home"></span>
-          Itens
-        </button>
-        <% end %>
-        <%= link_to feeds_path do %>
-        <button type="button" class="btn btn-default navbar-btn">
-          <span class="glyphicon glyphicon-cog"></span>
-          Feeds
-        </button>
-        <% end %>
-
-        <%= form_tag send(@path), :method => 'get', id: "search", class: "navbar-form navbar-left", role: "search" do %>
-        <div class="form-group">
-          <%= hidden_field_tag :feed, params[:feed] if params[:feed] %>
-          <%= hidden_field_tag :tag, params[:tag] if params[:tag] %>
-          <%= hidden_field_tag :calendar, params[:calendar] if params[:calendar] %>
-          <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "Procurar" %>
-        </div>
-        <span>
-          <button class="btn btn-default" type="submit">
-            <span class="glyphicon glyphicon-search"></span>
-          </button>
-          <%= link_to send(@path, safe_params([:calendar, :feed, :tag], params)), class: "btn btn-default #{"disabled" unless params[:search]}" do %>
-          <span class="glyphicon glyphicon-remove"></span>
-          <% end %>
-        </span>
-        <% end %>
-
-        <%= form_tag send(@path), :method => 'get', id: "calendar", class: "navbar-form navbar-left", role: "calendar" do %>
-        <div class="form-group">
-          <%= hidden_field_tag :feed, params[:feed] if params[:feed] %>
-          <%= hidden_field_tag :tag, params[:tag] if params[:tag] %>
-          <%= hidden_field_tag :search, params[:search] if params[:search] %>
-          <%= text_field_tag :calendar, params[:calendar], class: "form-control", id: "calendar-picker", disabled: @path != 'items_path' %>
-        </div>
-        <span>
-          <button class="btn btn-default <%= "disabled" if @path != 'items_path'%>" type="submit">
-            <span class="glyphicon glyphicon-calendar"></span>
-          </button>
-          <%= link_to send(@path, safe_params([:search, :feed, :tag], params)), class: "btn btn-default #{"disabled" unless params[:calendar]}" do %>
-          <span class="glyphicon glyphicon-remove"></span>
-          <% end %>
-        </span>
-        <% end %>
-
-      </div> <!-- navbar-collapse -->
-    </div>
-  </nav>
-
   <div class="container">
     <% flash.each do |name, msg| %>
       <%= content_tag :div, class: "alert alert-#{ name == "error" ? "danger" : "success" } alert-dismissable", role: "alert" do %>
@@ -91,34 +28,7 @@
         <%= msg %>
       <% end %>
     <% end %>
-    <div class="row">
-      <div class="col-md-3">
-        <div class="list-group" >
-          <%= link_to new_feed_path, data: {behavior: "modal"}, class: "list-group-item list-group-item-info" do %>
-            <span class="glyphicon glyphicon-plus"></span>
-            New Feed
-          <% end %>
-          <%= link_to send(@path, safe_params([:calendar, :search], params)), class: "list-group-item #{filter_active?('all')}" do %>
-            <span class="badge">
-              <%= human_readable_number @search.count %>
-            </span>
-            all
-          <% end %>
-          <% ActsAsTaggableOn::Tag.most_used.each do |tag| %>
-            <%= link_to send(@path, safe_params([:calendar, :search], {tag: tag.name}, params)), class: "list-group-item #{filter_active?(tag.name)}" do %>
-              <span class="badge">
-                <%= human_readable_number @search.tagged_with(tag.name).count %>
-              </span>
-              <%= tag.name %>
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <%= yield %>
-      </div>
-    </div>
+    <%= yield %>
   </div>
-  <div id="modal-holder"></div>
 </body>
 </html>
