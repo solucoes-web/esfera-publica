@@ -34,7 +34,8 @@ class Item < ApplicationRecord
 
   private
   def get_keywords
-    keywords = OTS.parse(summary.html_safe, language: "pt").keywords[0..4]
+    text = summary.html_safe + content.html_safe
+    keywords = OTS.parse(text, language: "pt").keywords[0..4]
     self.keyword_list = (keywords - Stopwords.first).join(', ')
     # provavelmente vou querer isso em outras linguas no futuro
   end
