@@ -98,9 +98,10 @@ RSpec.describe Item, type: :model do
   it "gets keywords" do
     (feed = build(:feed)).save(validate: false)
     parsed = double(:parsed, keywords: %w(lorem ipsum))
-    allow(OTS).to receive(:parse).with("lorem ipsum", language: "pt").and_return(parsed)
-    item = create(:item, feed: feed, summary: "lorem ipsum")
+    item = create(:item, feed: feed, name: "Title", summary: "lorem ipsum")
+    text = (Array.new(4, item.name) + Array.new(2, item.summary)).join(' ')
+    allow(OTS).to receive(:parse).with(text, language: "pt").and_return(parsed)
 
-    expect(item.keyword_list).to eq %w(lorem ipsum)
+    expect(item.keyword_list).to match_array %w(title lorem ipsum)
   end
 end
