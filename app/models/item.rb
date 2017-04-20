@@ -34,7 +34,8 @@ class Item < ApplicationRecord
 
   private
   def get_keywords
-    text = (summary || "") + (content || "")
+    # ajustei os pesos: 4 vezes para a manchete, 2 para o resumo e 1 para o conteudo
+    text = (Array.new(4, name) + Array.new(2, summary) + [content]).join(' ')
     text = ActionController::Base.helpers.sanitize(text)
     keywords = OTS.parse(text, language: "pt").keywords[0..4]
     self.keyword_list = (keywords - Stopwords.first).join(', ')
