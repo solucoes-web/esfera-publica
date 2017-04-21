@@ -1,5 +1,6 @@
 class Item < ApplicationRecord
   belongs_to :feed
+  has_many :interactions
 
   acts_as_taggable_on :keywords
 
@@ -19,6 +20,18 @@ class Item < ApplicationRecord
   }
   scope :date_published, ->(date) {
     where("published_at <= ?", date)
+  }
+  scope :favourites, ->(user) {
+    joins(:interactions).
+    where("interactions.user_id = ? AND favourite = ?", user.id, true)
+  }
+  scope :bookmarks, ->(user) {
+    joins(:interactions).
+    where("interactions.user_id = ? AND bookmark = ?", user.id, true)
+  }
+  scope :history, ->(user) {
+    joins(:interactions).
+    where("interactions.user_id = ? AND read = ?", user.id, true)
   }
 
   before_save do

@@ -71,6 +71,43 @@ RSpec.describe Item, type: :model do
     expect(Item.date_published(3.days.ago)).not_to include should_not_find2
   end
 
+  it "filters by favourites" do
+    user = create(:user)
+    (feed = build(:feed)).save(validate: false)
+    should_find = create(:item, feed: feed)
+    should_not_find = create(:item, feed: feed)
+    user.feeds << feed
+    user.favourite(should_find)
+
+    expect(Item.favourites(user)).to include should_find
+    expect(Item.favourites(user)).not_to include should_not_find
+  end
+
+  it "filters by bookmarks" do
+    user = create(:user)
+    (feed = build(:feed)).save(validate: false)
+    should_find = create(:item, feed: feed)
+    should_not_find = create(:item, feed: feed)
+    user.feeds << feed
+    user.bookmark(should_find)
+
+    expect(Item.bookmarks(user)).to include should_find
+    expect(Item.bookmarks(user)).not_to include should_not_find
+  end
+
+  it "filters by history" do
+    user = create(:user)
+    (feed = build(:feed)).save(validate: false)
+    should_find = create(:item, feed: feed)
+    should_not_find = create(:item, feed: feed)
+    user.feeds << feed
+    user.read(should_find)
+
+    expect(Item.history(user)).to include should_find
+    expect(Item.history(user)).not_to include should_not_find
+  end
+
+
   it "gets image from open graph" do
     (feed = build(:feed)).save(validate: false)
     img = 'http://example.com/imgs'

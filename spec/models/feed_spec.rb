@@ -22,7 +22,7 @@ RSpec.describe Feed, type: :model do
     feed = build(:feed)
     feed.users << user
     feed.save(validate: false)
-    
+
     expect(feed.users).to eq [user]
   end
 

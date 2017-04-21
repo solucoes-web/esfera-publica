@@ -11,9 +11,37 @@
     <h4 class="media-heading item-title">
       <%= raw(item.name) %>
     </h4>
-    <h6 class="media-heading item-date">
-      <%= default_date_format item.published_at %>
-    </h6>
+    <div>
+      <ul class="nav nav-pills">
+        <li>
+          <h5 class="item-date">
+            <%= default_date_format item.published_at %>
+          </h5>
+        </li>
+        <ul class="nav navbar-nav navbar-right col-md-5">
+          <li>
+            <%= link_to item_path(item, favourite: true), method: :patch do %>
+              <span class="glyphicon glyphicon-star interaction <%= active?(current_user, item, 'favourite') %>"></span>
+            <% end %>
+          </li>
+          <li>
+            <a href="#" class="share">
+              <span class="glyphicon glyphicon-retweet interaction"></span>
+            </a>
+          </li>
+          <li>
+            <%= link_to item_path(item, bookmark: true), method: :patch do %>
+              <span class="glyphicon glyphicon-bookmark interaction <%= active?(current_user, item, 'bookmark') %>"></span>
+            <% end %>
+          </li>
+          <li>
+            <a href="#" class="remove">
+              <span class="glyphicon glyphicon-trash interaction"></span>
+            </a>
+          </li>
+        </ul>
+      </ul>
+    </div>
     <div class="item">
       <% if item.image %>
         <%= image_tag item.image, width: '50%', class: 'item-img img-thumbnail', align: 'left' %>

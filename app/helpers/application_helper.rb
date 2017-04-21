@@ -32,6 +32,11 @@ module ApplicationHelper
     'active' if filter == @filter
   end
 
+  def active?(user, item, type)
+    inter = Interaction.find_by(user: user, item: item)
+    'active' if inter && inter.send("#{type}?") 
+  end
+
   def safe_params(options = [:tag, :feed, :date, :search], hash = {}, params)
     options.each do |option|
       hash[option] = params[option] unless params[option].blank?
