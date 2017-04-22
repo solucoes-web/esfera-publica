@@ -8,7 +8,6 @@ class FeedsController < ApplicationController
     @search = @search.search(params[:search]) if params[:search]
     @feeds = (params[:tag].blank? ? @search.all : @search.tagged_with(params[:tag]))
     @filter = get_filter(params)
-    @path = "feeds_path"
     
     render layout: 'main'
   end

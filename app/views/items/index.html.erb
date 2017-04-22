@@ -1,3 +1,13 @@
+<%= content_for :navbar do %>
+  <%= render 'search', locals: {path: 'items_path'} %>
+  <%= render 'calendar', locals: {disabled?: false} %>
+<% end %>
+
+<%= content_for :sidebar do %>
+  <%= render 'interaction_filters' %>
+  <%= render 'tag_filters', locals: {path: 'items_path'} %>
+<% end %>
+
 <%= content_tag_for(:ul, @items, class: 'media-list panel panel-default') do |item| %>
 <li class="media panel-body">
   <div class="media-left">
@@ -18,11 +28,9 @@
             <%= default_date_format item.published_at %>
           </h5>
         </li>
-        <ul class="nav navbar-nav navbar-right col-md-5">
+        <ul class="nav navbar-nav navbar-right col-md-4">
           <li>
-            <%= link_to item_path(item, favourite: true), method: :patch do %>
-              <span class="glyphicon glyphicon-star interaction <%= active?(current_user, item, 'favourite') %>"></span>
-            <% end %>
+            <%= interaction_icon(:favourite, 'star', current_user, item) %>
           </li>
           <li>
             <a href="#" class="share">
@@ -30,14 +38,7 @@
             </a>
           </li>
           <li>
-            <%= link_to item_path(item, bookmark: true), method: :patch do %>
-              <span class="glyphicon glyphicon-bookmark interaction <%= active?(current_user, item, 'bookmark') %>"></span>
-            <% end %>
-          </li>
-          <li>
-            <a href="#" class="remove">
-              <span class="glyphicon glyphicon-trash interaction"></span>
-            </a>
+            <%= interaction_icon(:bookmark, 'bookmark', current_user, item) %>
           </li>
         </ul>
       </ul>

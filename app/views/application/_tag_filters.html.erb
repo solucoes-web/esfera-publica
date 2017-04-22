@@ -1,0 +1,20 @@
+<div class="list-group" >
+  <%= link_to new_feed_path, data: {behavior: "modal"}, class: "list-group-item list-group-item-info" do %>
+    <span class="glyphicon glyphicon-plus"></span>
+    New Feed
+  <% end %>
+  <%= link_to_filter locals[:path], params, 'all' do %>
+    <span class="badge">
+      <%= human_readable_number @search.count %>
+    </span>
+    all
+  <% end %>
+  <% current_user.owned_tags.each do |tag| %>
+    <%= link_to_tag_filter locals[:path], params, tag.name do %>
+      <span class="badge">
+        <%= human_readable_number @search.tagged_with(tag.name).count %>
+      </span>
+      <%= tag.name %>
+    <% end %>
+  <% end %>
+</div>

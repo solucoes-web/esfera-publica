@@ -10,8 +10,7 @@
       <%= link_to "Esfera Pública", root_path, class: "navbar-brand" %>
     </div>
     <div class="collapse navbar-collapse" id="navbar">
-      <%= render 'search' %>
-      <%= render 'calendar' %>
+      <%= yield :navbar %>
       <%= render 'user' %>
     </div> <!-- navbar-collapse -->
   </div>

@@ -12,8 +12,7 @@ class ItemsController < ApplicationController
     end
     @items = @search.exclusive_filters(current_user, params).latest(20)
     @filter = get_filter(params)
-    @path = "items_path"
-    
+
     render layout: 'main'
   end
 
@@ -25,8 +24,8 @@ class ItemsController < ApplicationController
 
   # PATCH /items/1
   def update
-    current_user.favourite(@item) if params[:favourite]
-    current_user.bookmark(@item) if params[:bookmark]
+    current_user.toggle_favourite(@item) if params[:favourite]
+    current_user.toggle_bookmark(@item) if params[:bookmark]
     redirect_to items_path
   end
 
