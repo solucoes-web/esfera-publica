@@ -6,14 +6,10 @@ class FeedsController < ApplicationController
   def index
     @search = current_user.feeds
     @search = @search.search(params[:search]) if params[:search]
-    unless params[:tag].blank?
-      @filter = params[:tag]
-      @feeds = @search.tagged_with(@filter)
-    else
-      @feeds = @search.all
-      @filter = 'all'
-    end
+    @feeds = (params[:tag].blank? ? @search.all : @search.tagged_with(params[:tag]))
+    @filter = get_filter(params)
     @path = "feeds_path"
+    
     render layout: 'main'
   end
 

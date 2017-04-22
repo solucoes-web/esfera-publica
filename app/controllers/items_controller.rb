@@ -4,36 +4,16 @@ class ItemsController < ApplicationController
 
   # GET /items
   def index
-    @search = current_user.items
-    @search = @search.search(params[:search]) if params[:search]
-    unless params[:calendar].blank?
-      begin
-        date = Date.strptime(params[:calendar], "%d/%m/%Y")
-      rescue
-        redirect_to items_path, error: "Data inválida"
-      end
-      @search = @search.date_published(date)
+    begin
+      @search = current_user.items.cumulative_filters(params)
+    rescue Exception => e
+      redirect_to items_path, error: e.message
+      return
     end
-
-    if params[:favourites]
-      @filter = 'favourites'
-      @items = @search.favourites(current_user).latest(20)
-    elsif params[:bookmarks]
-      @filter = 'bookmarks'
-      @items = @search.bookmarks(current_user).latest(20)
-    elsif params[:history]
-      @filter = 'history'
-      @items = @search.history(current_user).latest(20)
-    elsif !params[:tag].blank?
-      @filter = params[:tag]
-      @items = @search.tagged_with(@filter).latest(20)
-    elsif !params[:feed].blank?
-      @items = @search.feed(params[:feed]).latest(20)
-    else
-      @items = @search.latest(20)
-      @filter = 'all'
-    end
+    @items = @search.exclusive_filters(current_user, params).latest(20)
+    @filter = get_filter(params)
     @path = "items_path"
+    
     render layout: 'main'
   end
 
@@ -51,14 +31,14 @@ class ItemsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_item
-      @item = Item.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_item
+    @item = Item.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def item_params
-      params.require(:item).permit(:name, :summary, :url, :published_at, :guid,
-                                   :feed, :favourite)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def item_params
+    params.require(:item).permit(:name, :summary, :url, :published_at, :guid,
+                                 :feed, :favourite)
+  end
 end

@@ -34,6 +34,29 @@ class Item < ApplicationRecord
     where("interactions.user_id = ? AND read = ?", user.id, true)
   }
 
+  scope :cumulative_filters, -> (params) {
+    search = params[:search] ? search(params[:search]) : Item
+    unless params[:calendar].blank?
+      date = strip_date(params[:calendar])
+      search = search.date_published(date)
+    end
+    search
+  }
+
+  scope :exclusive_filters, -> (user, params) {
+    if params[:favourites]
+      favourites(user)
+    elsif params[:bookmarks]
+      bookmarks(user)
+    elsif params[:history]
+      history(user)
+    elsif !params[:tag].blank?
+      tagged_with(params[:tag])
+    elsif !params[:feed].blank?
+      feed(params[:feed])
+    end
+  }
+
   before_save do
     get_keywords
     begin
@@ -46,6 +69,14 @@ class Item < ApplicationRecord
   end
 
   private
+  def self.strip_date(date)
+    begin
+      return Date.strptime(date, "%d/%m/%Y")
+    rescue
+      raise ArgumentError, 'Data inválida'
+     end
+  end
+
   def get_keywords
     # ajustei os pesos: 4 vezes para a manchete, 2 para o resumo e 1 para o conteudo
     text = (Array.new(4, name) + Array.new(2, summary) + [content]).join(' ')
