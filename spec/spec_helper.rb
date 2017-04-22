@@ -38,6 +38,10 @@ def sign_in(user)
   click_on 'Log in'
 end
 
+FactoryGirl::SyntaxRunner.class_eval do
+  include RSpec::Mocks::ExampleMethods
+end
+
 RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction

@@ -5,7 +5,7 @@ RSpec.feature "Interactions", type: :feature do
     clean_db
 
     user = create(:user)
-    (feed = build(:feed, users: [user])).save(validate: false)
+    feed = create(:feed, users: [user])
     @should_find = create(:item, feed: feed, name: "Primeiro", published_at: Time.now)
     @should_not_find = create(:item, feed: feed, name: "Segundo", published_at: 3.days.ago)
 

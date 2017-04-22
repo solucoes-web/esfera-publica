@@ -27,8 +27,7 @@ RSpec.feature "FeedWorkflows", type: :feature do
 
   scenario "Destroy feed" do
     3.times do
-      feed = build(:feed, users: [@user])
-      feed.save(validate: false)
+      feed = create(:feed, users: [@user])
     end
     visit feeds_path
     expect do
@@ -37,8 +36,7 @@ RSpec.feature "FeedWorkflows", type: :feature do
   end
 
   scenario "Edit feed" do
-    feed = build(:feed, users: [@user], name: "Test")
-    feed.save(validate: false)
+    feed = create(:feed, users: [@user], name: "Test")
     visit feeds_path
     first('#feeds-list :has(.glyphicon-cog)').click
 

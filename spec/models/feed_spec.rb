@@ -2,14 +2,14 @@ require 'rails_helper'
 
 RSpec.describe Feed, type: :model do
   it "has many items" do
-    (feed = build(:feed)).save(validate: false)
+    feed = create(:feed)
     item = create(:item, feed: feed)
 
     expect(feed.items).to eq [item]
   end
 
   it "items depend on feed to exist" do
-    (feed = build(:feed)).save(validate: false)
+    feed = create(:feed)
     item = create(:item, feed: feed)
 
     expect do
@@ -19,9 +19,7 @@ RSpec.describe Feed, type: :model do
 
   it "has many users" do
     user = create(:user)
-    feed = build(:feed)
-    feed.users << user
-    feed.save(validate: false)
+    feed = create(:feed, users: [user])
 
     expect(feed.users).to eq [user]
   end
@@ -43,10 +41,9 @@ RSpec.describe Feed, type: :model do
   end
 
   it "search keyword" do
-    should_find1 = build(:feed, name: "First test")
-    should_find2 = build(:feed, name: "Second test")
-    should_not_find = build(:feed, name: "Different thing")
-    [should_find1, should_find2].each{ |feed| feed.save(validate: false) }
+    should_find1 = create(:feed, name: "First test")
+    should_find2 = create(:feed, name: "Second test")
+    should_not_find = create(:feed, name: "Different thing")
 
     expect(Feed.search('test')).to include should_find1
     expect(Feed.search('test')).to include should_find2
@@ -102,7 +99,7 @@ RSpec.describe Feed, type: :model do
     it "follows links to RSS from URL" do
       allow(Feedjira::Feed).to receive(:fetch_and_parse).with("#{@url}/rss").and_return(@rss)
       allow(Pismo[@url]).to receive(:feed).and_return("#{@url}/rss")
-      feed = create(:feed, url: @url)
+      (feed = build(:feed, url: @url)).save(valides: false)
 
       expect(feed.url).to eq "#{@url}/rss"
       expect(feed.instance_variable_get(:@rss)).to eq @rss
@@ -145,8 +142,7 @@ RSpec.describe Feed, type: :model do
     end
 
     it "adds items" do
-      feed = build(:feed)
-      feed.save(validate: false)
+      feed = create(:feed)
       @rss = double(:rss, entries: [@entry])
 
       feed.instance_variable_set(:@rss, @rss)
