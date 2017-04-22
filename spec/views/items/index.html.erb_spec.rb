@@ -5,6 +5,7 @@ RSpec.describe "items/index", type: :view do
     assign(:search, Item)
     @items = (1..2).map{ build_stubbed(:item) }
     assign(:items, @items)
+    sign_in create(:user)
   end
 
   it "renders a list of items" do

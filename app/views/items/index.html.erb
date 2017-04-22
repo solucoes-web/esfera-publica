@@ -1,11 +1,11 @@
 <%= content_for :navbar do %>
-  <%= render 'search', locals: {path: 'items_path'} %>
-  <%= render 'calendar', locals: {disabled?: false} %>
+  <%= render 'application/search', locals: {path: 'items_path'} %>
+  <%= render 'application/calendar', locals: {disabled?: false} %>
 <% end %>
 
 <%= content_for :sidebar do %>
-  <%= render 'interaction_filters' %>
-  <%= render 'tag_filters', locals: {path: 'items_path'} %>
+  <%= render 'application/interaction_filters' %>
+  <%= render 'application/tag_filters', locals: {path: 'items_path'} %>
 <% end %>
 
 <%= content_tag_for(:ul, @items, class: 'media-list panel panel-default') do |item| %>
