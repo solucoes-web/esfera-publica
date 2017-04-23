@@ -17,6 +17,8 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+
 VCR.configure do |config|
   config.cassette_library_dir = "spec/vcr_cassettes"
   config.hook_into :faraday
@@ -47,6 +49,8 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
     clean_db
   end
+
+  config.include RequestSpecHelper, type: :request
 
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
