@@ -13,12 +13,13 @@ RSpec.feature "Tags", type: :feature do
 
   scenario "create tags" do
     VCR.use_cassette "folha" do
+      allow_any_instance_of(Feed).to receive(:valid?).and_return true
       visit new_feed_path
       fill_in "Url", with: "http://feeds.folha.uol.com.br/folha/emcimadahora/rss091.xml"
       fill_in "Tags", with: "tag1, tag2"
       expect do
         click_button "Register"
-      end.to change{@user.owned_tags.count}.by 1
+      end.to change{ @user.owned_tags.count }.by 2
     end
   end
 

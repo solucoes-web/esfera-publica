@@ -1,9 +1,9 @@
-<%= content_for :navbar do %>
+<%= content_for :navbar_filters do %>
   <%= render 'application/search', locals: {path: 'feeds_path'} %>
   <%= render 'application/calendar', locals: {disabled?: true} %>
 <% end %>
 
-<%= content_for :sidebar do %>
+<%= content_for :sidebar_filters do %>
   <%= render 'application/tag_filters', locals: {path: 'feeds_path'} %>
 <% end %>
 

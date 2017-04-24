@@ -1,10 +1,6 @@
 require 'rails_helper'
 
 RSpec.feature "Search", type: :feature do
-  before :all do
-#    WebMock.allow_net_connect!
-  end
-
   before :each do
     @user = create(:user)
     sign_in @user

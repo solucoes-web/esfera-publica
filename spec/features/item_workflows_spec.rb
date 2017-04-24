@@ -9,6 +9,8 @@ RSpec.feature "ItemWorkflows", type: :feature do
     @item = create(:item, feed: @feed, name: "title")
   end
 
+  pending "Quero fazer todos os testes de controlador aqui"
+
   scenario "list items" do
     visit items_path
     expect(page).to have_content("title")

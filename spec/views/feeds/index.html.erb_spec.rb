@@ -7,6 +7,8 @@ RSpec.describe "feeds/index", type: :view do
     sign_in create(:user)
   end
 
+  pending "quero ser bem mais exaustivo aqui no fim"
+
   it "renders a list of feeds" do
     render
     assert_select "tr td", :text => "Name".to_s, :count => 2

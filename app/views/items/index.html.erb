@@ -1,9 +1,9 @@
-<%= content_for :navbar do %>
+<%= content_for :navbar_filters do %>
   <%= render 'application/search', locals: {path: 'items_path'} %>
   <%= render 'application/calendar', locals: {disabled?: false} %>
 <% end %>
 
-<%= content_for :sidebar do %>
+<%= content_for :sidebar_filters do %>
   <%= render 'application/interaction_filters' %>
   <%= render 'application/tag_filters', locals: {path: 'items_path'} %>
 <% end %>
@@ -24,22 +24,16 @@
     <div>
       <ul class="nav nav-pills">
         <li>
-          <h5 class="item-date">
-            <%= default_date_format item.published_at %>
-          </h5>
+          <h5 class="item-date"><%= default_date_format item.published_at %></h5>
         </li>
         <ul class="nav navbar-nav navbar-right col-md-4">
-          <li>
-            <%= interaction_icon(:favourite, 'star', current_user, item) %>
-          </li>
-          <li>
+          <li><%= interaction_icon(:favourite, 'star', current_user, item) %></li>
+          <!--li>
             <a href="#" class="share">
               <span class="glyphicon glyphicon-retweet interaction"></span>
             </a>
-          </li>
-          <li>
-            <%= interaction_icon(:bookmark, 'bookmark', current_user, item) %>
-          </li>
+          </li -->
+          <li><%= interaction_icon(:bookmark, 'bookmark', current_user, item) %></li>
         </ul>
       </ul>
     </div>
@@ -59,9 +53,9 @@
       </button>
       <% end %>
       <%= link_to item.url do %>
-      <button type='button', class='btn btn-default'>
-        Ler na página
-      </button>
+        <button type='button', class='btn btn-default'>
+          Ler na página
+        </button>
       <% end %>
     </div>
   </div>

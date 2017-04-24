@@ -11,6 +11,8 @@ RSpec.feature "FeedWorkflows", type: :feature do
     sign_in @user
   end
 
+  pending "Quero fazer todos os testes de controlador aqui"
+
   scenario "Register new feed" do
     VCR.use_cassette "folha" do
       visit feeds_path
