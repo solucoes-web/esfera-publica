@@ -5,10 +5,11 @@ RSpec.feature "ItemWorkflows", type: :feature do
     clean_db
     @user = create(:user)
     sign_in @user
-    @feed = build(:feed, users: [@user], url: "http://example.org")
-    @feed.save(validate: false)
+    @feed = create(:feed, users: [@user], url: "http://example.org")
     @item = create(:item, feed: @feed, name: "title")
   end
+
+  pending "Quero fazer todos os testes de controlador aqui"
 
   scenario "list items" do
     visit items_path

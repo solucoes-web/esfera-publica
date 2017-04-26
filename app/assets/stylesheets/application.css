@@ -25,3 +25,25 @@
   display: inline-block;
   margin-bottom: 20px;
 }
+#interactions .glyphicon{
+  margin-right: 3px;
+}
+.interaction{
+  color: black;
+}
+
+.glyphicon-star.active{
+  color: yellow;
+}
+
+.glyphicon-bookmark.active{
+  color: green;
+}
+
+.glyphicon-retweet.active{
+  color: blue;
+}
+
+.glyphicon-trash.active{
+  color: red;
+}

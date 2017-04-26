@@ -1,0 +1,28 @@
+<div class="list-group" id="interactions" >
+  <%= link_to_interaction_filter params, :favourites do %>
+    <span class="glyphicon glyphicon-star"></span>
+    Favourites
+    <span class="badge" id="favourites_count">
+      <%= human_readable_number @search.favourites(current_user).count %>
+    </span>
+  <% end %>
+  <!-- a href="#" class="list-group-item">
+    <span class="glyphicon glyphicon-retweet"></span>
+    Shared
+    <span class="badge">17</span>
+  </a -->
+  <%= link_to_interaction_filter params, :bookmarks do %>
+    <span class="glyphicon glyphicon-bookmark"></span>
+    Read Later
+    <span class="badge" id="bookmarks_count">
+        <%= human_readable_number @search.bookmarks(current_user).count %>
+    </span>
+  <% end %>
+  <%= link_to_interaction_filter params, :history do %>
+    <span class="glyphicon glyphicon-repeat"></span>
+    History
+    <span class="badge">
+      <%= human_readable_number @search.history(current_user).count %>
+    </span>
+  <% end %>
+</div>

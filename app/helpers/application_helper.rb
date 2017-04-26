@@ -28,14 +28,81 @@ module ApplicationHelper
     number == 1 ? "1 #{string}" : "#{number} #{string}s"
   end
 
-  def filter_active?(filter)
-    'active' if filter == @filter
+  def interaction_filters
+    [:bookmarks, :favourites, :history]
   end
 
-  def safe_params(options = [:tag, :feed, :date, :search], hash = {}, params)
-    options.each do |option|
-      hash[option] = params[option] unless params[option].blank?
+  def exclusive_filters
+    interaction_filters + [:tag, :feed]
+  end
+
+  def cumulative_filters
+    [:search, :calendar]
+  end
+
+  def filters
+    exclusive_filters + cumulative_filters
+  end
+
+  def safe_params(params)
+    # para cada filtro pego o parametro correspondente
+    hash = Hash[filters.collect{ |f| [f, params[f]]}]
+    # removo aqueles cujo parametro é nulo
+    hash.reject{|k,v| v.blank? }
+  end
+
+  def link_to_interaction_filter(params, interaction_type, &block)
+    filter = interaction_type.to_s
+    new_param = {interaction_type => true}
+    link_to_filter('items_path', params, filter, new_param, interaction_type, &block)
+  end
+
+  def link_to_tag_filter(path, params, tag, &block)
+    filter = tag
+    new_param = {tag: tag}
+    link_to_filter(path, params, filter, new_param, &block)
+  end
+
+  def link_to_filter(path, params, filter, new_param = nil, id = nil)
+    # acrecento um novo parâmetro referente ao filtro exclusivo se existir
+    hash = new_param || Hash.new
+    # incluo os parametros dos filtros cumulativos que existirem
+    cumulative_filters.each do |f|
+      hash[f] = params[f] unless params[f].blank?
     end
-    hash
+
+    active = 'active' if filter == @filter
+    css = { class: "list-group-item #{active}" }
+    css.merge!(id: id) if id
+
+    link_to send(path, hash), css do
+      yield
+    end
+  end
+
+  def link_to_clear_filter(path, type, params)
+    hash = safe_params(params).except(type)
+
+    link_to send(path, hash), class: "btn btn-default #{"disabled" unless params[type]}" do
+      yield
+    end
+  end
+
+  def active_icon?(user, item, type)
+    inter = Interaction.find_by(user: user, item: item)
+    active = 'active' if inter && inter.send(type.to_s + '?')
+  end
+
+  def interaction_icon(type, icon, user, item)
+    # pega a interação ligando o usuario ao item
+    inter = Interaction.find_by(user: user, item: item)
+    # verifica se é ativa
+    active = 'active' if inter && inter.send(type.to_s + '?')
+    # link para toggle da interação com um ícone
+    hash = safe_params(params)
+    hash[type] = :toggle
+    link_to interact_path(item, hash), method: :patch, class: 'interaction' do
+      content_tag :span, "", class: "glyphicon glyphicon-#{icon} #{active}"
+    end
   end
 end

@@ -1,0 +1,5 @@
+$("#bookmarks_count").html(<%= @bookmarks_count %>);
+$("#favourites_count").html(<%= @favourites_count %>);
+$("#item<%= @item.id %> .glyphicon-star").attr("class", "glyphicon glyphicon-star <%= active_icon?(current_user, @item, :favourite) %>");
+$("#item<%= @item.id %> .glyphicon-bookmark").attr("class", "glyphicon glyphicon-bookmark <%= active_icon?(current_user, @item, :bookmark) %>");
+// falta mudar a cor do icone nos dois

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Item, type: :model do
   it "belongs to feed" do
-    (feed = build(:feed)).save(validate: false)
+    feed = create(:feed)
     item = create(:item, feed: feed)
     expect(item.feed).to eq feed
   end
@@ -10,8 +10,8 @@ RSpec.describe Item, type: :model do
   it "filters by tag" do
     tagged_feed = build(:feed)
     tagged_feed.tag_list.add("Tag")
-    simple_feed = build(:feed)
-    [tagged_feed, simple_feed].each{|feed| feed.save(validate: false)}
+    tagged_feed.save(validate: false)
+    simple_feed = create(:feed)
 
     tagged_item = create(:item, feed: tagged_feed)
     simple_item = create(:item, feed: simple_feed)
@@ -21,10 +21,9 @@ RSpec.describe Item, type: :model do
   end
 
   it "filter most recent" do
-    (feed = build(:feed)).save(validate: false)
-    first = create(:item, feed: feed, published_at: Time.now)
+    first = create(:item, published_at: Time.now)
     (1..10).each do
-      create(:item, feed: feed, published_at: 2.days.ago)
+      create(:item, published_at: 2.days.ago)
     end
 
     expect(Item.latest(1)).to include(first)
@@ -32,10 +31,9 @@ RSpec.describe Item, type: :model do
   end
 
   it "search keyword" do
-    (feed = build(:feed)).save(validate: false)
-    should_find1 = create(:item, feed: feed, name: "First test")
-    should_find2 = create(:item, feed: feed, summary: "Second test")
-    should_not_find = create(:item, feed: feed, name: "Different thing")
+    should_find1 = create(:item, name: "First test")
+    should_find2 = create(:item, summary: "Second test")
+    should_not_find = create(:item, name: "Different thing")
 
     expect(Item.search('test')).to include should_find1
     expect(Item.search('test')).to include should_find2
@@ -43,9 +41,8 @@ RSpec.describe Item, type: :model do
   end
 
   it "filters by feed" do
-    feed1 = build(:feed, name: "Primeiro feed")
-    feed2 = build(:feed, name: "Segundo feed")
-    [feed1, feed2].each{|feed| feed.save(validate: false)}
+    feed1 = create(:feed, name: "Primeiro feed")
+    feed2 = create(:feed, name: "Segundo feed")
 
     should_find1 = create(:item, feed: feed1, name: "First test")
     should_find2 = create(:item, feed: feed1, summary: "Second test")
@@ -59,11 +56,10 @@ RSpec.describe Item, type: :model do
   end
 
   it "filters by date published" do
-    (feed = build(:feed)).save(validate: false)
-    should_find1 = create(:item, feed: feed, published_at: 4.days.ago, name: "Primeiro")
-    should_find2 = create(:item, feed: feed, published_at: 5.days.ago, name: "Segundo")
-    should_not_find1 = build(:item, feed: feed, published_at: 1.days.ago, name: "Terceiro")
-    should_not_find2 = build(:item, feed: feed, published_at: 2.days.ago, name: "Quarto")
+    should_find1 = create(:item, published_at: 4.days.ago, name: "Primeiro")
+    should_find2 = create(:item, published_at: 5.days.ago, name: "Segundo")
+    should_not_find1 = build(:item, published_at: 1.days.ago, name: "Terceiro")
+    should_not_find2 = build(:item, published_at: 2.days.ago, name: "Quarto")
 
     expect(Item.date_published(3.days.ago)).to include should_find1
     expect(Item.date_published(3.days.ago)).to include should_find2
@@ -71,34 +67,64 @@ RSpec.describe Item, type: :model do
     expect(Item.date_published(3.days.ago)).not_to include should_not_find2
   end
 
+  it "filters by favourites" do
+    user = create(:user)
+    should_find = create(:item)
+    should_not_find = create(:item)
+    user.favourite(should_find)
+
+    expect(Item.favourites(user)).to include should_find
+    expect(Item.favourites(user)).not_to include should_not_find
+  end
+
+  it "filters by bookmarks" do
+    user = create(:user)
+    should_find = create(:item)
+    should_not_find = create(:item)
+    user.bookmark(should_find)
+
+    expect(Item.bookmarks(user)).to include should_find
+    expect(Item.bookmarks(user)).not_to include should_not_find
+  end
+
+  it "filters by history" do
+    user = create(:user)
+    should_find = create(:item)
+    should_not_find = create(:item)
+    user.read(should_find)
+
+    expect(Item.history(user)).to include should_find
+    expect(Item.history(user)).not_to include should_not_find
+  end
+
+  pending "cumulative filters"
+  pending "exclusive filters"
+
   it "gets image from open graph" do
-    (feed = build(:feed)).save(validate: false)
     img = 'http://example.com/imgs'
     og = double(:og, images: [img])
     url = 'http://example.com'
     mock_request(url)
     allow(OpenGraph).to receive(:new).with("").and_return(og)
-    item = create(:item, feed: feed, url: url)
+    item = create(:item, url: url)
 
     expect(item.image).to eq img
   end
 
   it "gets content from item page" do
-    (feed = build(:feed)).save(validate: false)
     content = "Lorem ipsum"
     readability = double(:readability, content: content)
     url = 'http://example.com'
     mock_request(url)
     allow(Readability::Document).to receive(:new).with("").and_return(readability)
-    item = create(:item, feed: feed, url: url)
+    item = create(:item, url: url)
 
     expect(item.content).to eq content
   end
 
   it "gets keywords" do
-    (feed = build(:feed)).save(validate: false)
     parsed = double(:parsed, keywords: %w(lorem ipsum))
-    item = create(:item, feed: feed, name: "Title", summary: "lorem ipsum")
+    item = create(:item, name: "Title", summary: "lorem ipsum")
     text = (Array.new(4, item.name) + Array.new(2, item.summary)).join(' ')
     allow(OTS).to receive(:parse).with(text, language: "pt").and_return(parsed)
 

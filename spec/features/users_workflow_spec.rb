@@ -40,7 +40,7 @@ RSpec.feature "UserWorkflows", type: :feature do
   scenario "visit costumized page" do
     user = create(:user)
     sign_in user
-    (feed = build(:feed, users: [user])).save(validate: false)
+    feed = create(:feed, users: [user])
     item = create(:item, feed: feed, name: "Titulo")
 
     visit root_path
@@ -49,7 +49,7 @@ RSpec.feature "UserWorkflows", type: :feature do
 
   scenario "visit inaccessible page" do
     user = create(:user)
-    (feed = build(:feed, users: [user])).save(validate: false)
+    feed = create(:feed, users: [user])
     item = create(:item, feed: feed, name: "Titulo")
 
     visit root_path

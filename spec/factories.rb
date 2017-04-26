@@ -1,15 +1,15 @@
 FactoryGirl.define do
   factory :feed do
-#    user
     name "Name"
     sequence :url do |n|
       "http://example.org/#{n}.rss"
     end
 
-    after(:build) do |feed|
+    before(:create) do |feed|
       if feed.url
         mock_request(feed.url)
-#        allow(Feedjira::Feed).to receive(:fetch_and_parse).with(feed.url).and_return(nil)
+        allow(feed).to receive(:get_host_info)
+        allow(feed).to receive(:well_formed_rss).and_return true
       end
     end
   end

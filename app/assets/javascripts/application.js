@@ -17,8 +17,19 @@
 //= require bootstrap
 //= require_tree .
 
+jQuery.ajaxSetup({
+  'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
+})
+
 $(function (){
         $('#calendar-picker').datepicker({
           dateFormat: 'dd/mm/yy'
+        });
+        $(".interaction").on("click", function(){
+          $.ajax({
+            url: $(this).attr("href"),
+            type: 'PATCH'
+          });
+          return false;
         });
 });

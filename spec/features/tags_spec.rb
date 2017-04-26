@@ -11,25 +11,23 @@ RSpec.feature "Tags", type: :feature do
     sign_in @user
   end
 
-  scenario "create a new tag for specific feed" do
+  scenario "create tags" do
     VCR.use_cassette "folha" do
-      feed = build(:feed, users: [@user], url: "http://feeds.folha.uol.com.br/folha/emcimadahora/rss091.xml")
-      feed.save(validate: false)
-      visit feeds_path
-      first('#feeds-list :has(.glyphicon-cog)').click
-
+      allow_any_instance_of(Feed).to receive(:valid?).and_return true
+      visit new_feed_path
+      fill_in "Url", with: "http://feeds.folha.uol.com.br/folha/emcimadahora/rss091.xml"
       fill_in "Tags", with: "tag1, tag2"
       expect do
         click_button "Register"
-      end.to change{feed.tags.count}.by 2
+      end.to change{ @user.owned_tags.count }.by 2
     end
   end
 
   scenario "filter items using tag" do
-    tagged_feed = build(:feed, users: [@user], name: "Tagged Feed")
-    simple_feed = build(:feed, users: [@user], name: "Simple Feed")
+    tagged_feed = create(:feed, users: [@user], name: "Tagged Feed")
+    simple_feed = create(:feed, users: [@user], name: "Simple Feed")
     @user.tag(tagged_feed, with: "Tag", on: :tags)
-    [tagged_feed, simple_feed].each{|feed| feed.save(validate: false)}
+    tagged_feed.save(validate: false)
 
     tagged_item = create(:item, name: "Tagged Item", feed: tagged_feed)
     simple_item = create(:item, name: "Simple Item", feed: simple_feed)
@@ -41,10 +39,10 @@ RSpec.feature "Tags", type: :feature do
   end
 
   scenario "filter feeds using tag" do
-    tagged_feed = build(:feed, users: [@user], name: "Tagged Feed")
-    simple_feed = build(:feed, users: [@user], name: "Simple Feed")
+    tagged_feed = create(:feed, users: [@user], name: "Tagged Feed")
+    simple_feed = create(:feed, users: [@user], name: "Simple Feed")
     @user.tag(tagged_feed, with: "Tag", on: :tags)
-    [tagged_feed, simple_feed].each{|feed| feed.save(validate: false)}
+    tagged_feed.save(validate: false)
 
     visit feeds_path(tag: "Tag")
 
@@ -53,7 +51,7 @@ RSpec.feature "Tags", type: :feature do
   end
 
   scenario "list tags in sidebar" do
-    feed = build(:feed, users: [@user], name: "Feed")
+    feed = create(:feed, users: [@user], name: "Feed")
     @user.tag(feed, with: "Tag", on: :tags)
     feed.save(validate: false)
     visit root_path
@@ -63,7 +61,7 @@ RSpec.feature "Tags", type: :feature do
 
   scenario "list only owned tags" do
     other = create(:user)
-    feed = build(:feed, users: [@user, other])
+    feed = create(:feed, users: [@user, other])
     @user.tag(feed, with: "My tag", on: :tags)
     other.tag(feed, with: "His tag", on: :tags)
     feed.save(validate: false)

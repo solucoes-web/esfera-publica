@@ -10,9 +10,8 @@
       <%= link_to "Esfera Pública", root_path, class: "navbar-brand" %>
     </div>
     <div class="collapse navbar-collapse" id="navbar">
-      <%= render 'search' %>
-      <%= render 'calendar' %>
-      <%= render 'user' %>
+      <%= yield :navbar_filters %>
+      <%= render 'user_menu' %>
     </div> <!-- navbar-collapse -->
   </div>
 </nav>
