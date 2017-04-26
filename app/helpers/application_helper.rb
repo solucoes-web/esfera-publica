@@ -88,14 +88,21 @@ module ApplicationHelper
     end
   end
 
+  def active_icon?(user, item, type)
+    inter = Interaction.find_by(user: user, item: item)
+    active = 'active' if inter && inter.send(type.to_s + '?')
+  end
+
   def interaction_icon(type, icon, user, item)
     # pega a interação ligando o usuario ao item
     inter = Interaction.find_by(user: user, item: item)
     # verifica se é ativa
     active = 'active' if inter && inter.send(type.to_s + '?')
     # link para toggle da interação com um ícone
-    link_to item_path(item, type => :toggle), method: :patch do
-      content_tag :span, "", class: "glyphicon glyphicon-#{icon} interaction #{active}"
+    hash = safe_params(params)
+    hash[type] = :toggle
+    link_to interact_path(item, hash), method: :patch, class: 'interaction' do
+      content_tag :span, "", class: "glyphicon glyphicon-#{icon} #{active}"
     end
   end
 end

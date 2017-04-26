@@ -11,8 +11,8 @@ RSpec.describe ItemsController, type: :routing do
       expect(get: "/items/1").to route_to("items#show", id: "1")
     end
 
-    it "routes to #update via PUT" do
-      expect(put: "/items/1").to route_to("items#update", id: "1")
+    it "routes to #interact via PUT" do
+      expect(patch: "/items/1/interact").to route_to("items#interact", id: "1")
     end
 
     it "routes to #index on root" do

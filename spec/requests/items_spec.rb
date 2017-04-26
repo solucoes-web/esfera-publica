@@ -14,8 +14,8 @@ RSpec.describe "Items", type: :request do
       get item_path create(:item)
     end
 
-    it "should deny access to update item" do
-      put item_path(create(:item)), params: {favourite: true}
+    it "should deny access to interact with item" do
+      patch interact_path(create(:item)), params: {favourite: true}
     end
   end
 
@@ -38,7 +38,7 @@ RSpec.describe "Items", type: :request do
     it "should successfully update item" do
       item = create(:feed)
       expect{
-        put item_path(create(:item)), params: {favourite: true}
+        patch interact_path(create(:item)), params: {favourite: true}
       }.to change{@user.favourites.count}.by 1
       expect(response).to redirect_to items_path
     end

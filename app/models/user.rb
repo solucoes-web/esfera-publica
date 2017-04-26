@@ -10,7 +10,7 @@ class User < ApplicationRecord
   acts_as_tagger
 
   ["favourite", "bookmark", "read"].each do |interaction|
-    # bookmark, favourite e read 
+    # bookmark, favourite e read
     define_method(interaction) do |item|
       inter = interactions.find_or_create_by(item: item)
       inter.send(interaction + "=", true)
@@ -28,6 +28,12 @@ class User < ApplicationRecord
     define_method("toggle_" + interaction) do |item|
       inter = interactions.find_or_create_by(item: item)
       inter.toggle!(interaction)
+    end
+
+    # bookmark?, favourite? e read?
+    define_method(interaction + "?") do |item|
+      inter = interactions.find_or_create_by(item: item)
+      inter.send(interaction + "?")
     end
 
     # bookmarks, favourites e history

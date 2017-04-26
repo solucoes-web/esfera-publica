@@ -22,11 +22,19 @@ class ItemsController < ApplicationController
     render layout: 'modal'
   end
 
-  # PATCH /items/1
-  def update
+  # PATCH /interact/1
+  def interact
+    set_item
     current_user.toggle_favourite(@item) if params[:favourite]
     current_user.toggle_bookmark(@item) if params[:bookmark]
-    redirect_to items_path
+    respond_to do |format|
+      format.html{ redirect_to items_path }
+      format.js do
+        filters = current_user.items.cumulative_filters(params)
+        @bookmarks_count = filters.bookmarks(current_user).count
+        @favourites_count = filters.favourites(current_user).count
+      end
+    end
   end
 
   private
