@@ -2,6 +2,10 @@ class Feed < ApplicationRecord
   has_many :items, dependent: :destroy
   validates :url, :name, presence: true
 
+  scope :search, ->(keyword) {
+   where("name LIKE ?", "%#{keyword}%")
+  }
+
   def get_basic_info
     begin
       f = Feedjira::Feed.fetch_and_parse url

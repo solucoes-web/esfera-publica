@@ -3,7 +3,12 @@ class FeedsController < ApplicationController
 
   # GET /feeds
   def index
-    @feeds = Feed.all
+   if params[:search]
+     @search = Feed.search(params[:search])
+   else
+      @search = Feed
+    end
+   @feeds = @search.all
   end
 
   # GET /feeds/1

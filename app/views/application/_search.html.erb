@@ -1,0 +1,13 @@
+<%= form_tag send(locals[:path]), method: 'get', id: "search", class: "navbar-form navbar-left", role: "search" do %>
+  <div class="form-group">
+    <% [:calendar, :feed].each do |f| %>
+      <%= hidden_field_tag f, params[f] if params[f] %>
+    <% end %>
+    <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "Procurar" %>
+  </div>
+  <span>
+    <button class="btn btn-default" type="submit">
+      <span class="glyphicon glyphicon-search"></span>
+    </button>
+  </span>
+<% end %>

@@ -1,0 +1,13 @@
+<%= form_tag items_path, method: 'get', id: "calendar", class: "navbar-form navbar-left", role: "calendar" do %>
+  <div class="form-group">
+    <% [:serch, :feed].each do |f| %>
+      <%= hidden_field_tag f, params[f] if params[f] %>
+    <% end %>
+    <%= text_field_tag :calendar, params[:calendar], class: "form-control", id: "calendar-picker", disabled: locals[:disabled?] %>
+  </div>
+  <span>
+    <button class="btn btn-default <%= "disabled" if locals[:disabled?]%>" type="submit">
+      <span class="glyphicon glyphicon-calendar"></span>
+    </button>
+  </span>
+<% end %>

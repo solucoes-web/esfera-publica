@@ -1,3 +1,8 @@
+<%= content_for :navbar_filters do %>
+  <%= render 'application/search', locals: {path: 'items_path'} %>
+  <%= render 'application/calendar', locals: {disabled?: false} %>
+<% end %>
+
 <%= content_tag_for(:ul, @items, class: 'media-list panel panel-default') do |item| %>
 <li class="media panel-body">
   <div class="media-left">

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'rails'
 
 RSpec.describe "Feeds", type: :request do
   describe "GET /feeds" do

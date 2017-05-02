@@ -2,10 +2,13 @@ class ItemsController < ApplicationController
 
   # GET /item
   def index
-    @items = Item.all
-    unless params[:feed].blank?
-      @items = Item.feed(params[:feed]).all
-    end
+   begin
+     @search = Item.cumulative_filters(params)
+   rescue Exception => e
+     redirect_to items_path, error: e.message
+     return
+   end
+   @items = @search.latest(20) # pegas os últimos 20 encontrados
   end
 
   def item_params

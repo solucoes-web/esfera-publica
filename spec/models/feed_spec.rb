@@ -16,4 +16,14 @@ RSpec.describe Feed, type: :model do
       @feed.destroy
     end.to change{Item.count}.by -1
   end
+
+  it "search keyword" do
+    should_find1 = create(:feed, name: "First test")
+    should_find2 = create(:feed, name: "Second test")
+    should_not_find = create(:feed, name: "Different thing")
+
+    expect(Feed.search('test')).to include should_find1
+    expect(Feed.search('test')).to include should_find2
+    expect(Feed.search('test')).not_to include should_not_find
+  end
 end
